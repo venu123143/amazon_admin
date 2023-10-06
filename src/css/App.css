@@ -1,0 +1,59 @@
+:root {
+    --color-131921: #131921;
+    --color-3b4149: #3b4149;
+    --color-febd69: #febd69;
+    --color-232f3e: #232f3e;
+    --color-bf4800: #bf4800;
+}
+
+.ant-layout {
+    min-height: 100vh;
+}
+
+.button {
+    background-color: var(--color-232f3e);
+}
+
+.button:hover {
+    background-color: var(--color-febd69);
+    color: #131921;
+}
+
+.ant-Layout-sider {
+    flex: 0 0 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
+    width: 250px !important;
+    transition: all 3s ease-in;
+}
+
+.ant-Layout-sider-collapsed {
+    flex: 0 0 80px !important;
+    max-width: 80px !important;
+    min-width: 80px !important;
+    width: 80px !important;
+    transition: all 3s ease-in !important;
+}
+
+:where(.css-dev-only-do-not-override-1vr7spz).ant-layout-header {
+    line-height: 0;
+}
+
+main {
+    height: 80vh;
+    overflow-y: scroll;
+
+}
+
+main::-webkit-scrollbar {
+    width: 0;
+}
+
+.ant-menu-item-selected {
+    background-color: #1677ff;
+}
+
+:where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark>.ant-menu .ant-menu-item-selected {
+    margin:5px;
+}
