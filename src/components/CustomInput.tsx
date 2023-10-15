@@ -2,7 +2,8 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useState } from "react"
 
 const CustomInput = (props: any) => {
-    const { placeholder, classname, id, type, name, value, onChange, onBlur } = props;
+    const { placeholder, className, id, type, name, value, onChange, onBlur } = props;
+    
     const [visible, setVisible] = useState(false)
 
     return (
@@ -11,8 +12,8 @@ const CustomInput = (props: any) => {
                 <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-900">
                     {placeholder} <span className="text-red-500 text-lg">*</span>
                 </label>
-                <input type={`${visible === true ? "text" : type}`} id={id} name={name} value={value} onChange={onChange} onBlur={onBlur}
-                    className={` ${classname} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
+                <input  type={`${visible === true ? "text" : type}`} id={id} name={name} value={value} onChange={onChange} onBlur={onBlur}
+                    className={` ${className}  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
                     placeholder={placeholder}
                 />
                 <div onClick={() => setVisible(!visible)} className={`${type === "password" ? "block" : "hidden"} absolute top-11 right-3 cursor-pointer`}>

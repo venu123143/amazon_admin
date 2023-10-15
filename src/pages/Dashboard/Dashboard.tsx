@@ -1,37 +1,30 @@
-import SalesCard from "../../components/SalesCard"
-import { cards } from "../../static/Static"
+import { useEffect } from "react"
+import { useSelector } from "react-redux";
 import Chart from 'react-apexcharts'
+import { useNavigate } from "react-router-dom"
 
-import { Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import SalesCard from "../../components/SalesCard"
+import { RootState } from "../../Redux/Store";
+import Orders from "../product/Orders"
+
 const Dashboard = () => {
+  const navigate = useNavigate()
+  const { orders } = useSelector((state: RootState) => state.ord)
+  const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
+
+  useEffect(() => {
+    if (user === null) {
+      navigate('/')
+    }
+  }, [message, user, isLoading, isError, isSuccess])
+
+
   interface DataType {
     key: React.Key;
     name: string;
     product: number;
     status: string;
   }
-  const columns: ColumnsType<DataType> = [
-    {
-      title: 'SNO.',
-      dataIndex: 'key',
-      render: (text: string) => <a>{text}</a>,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-    },
-    {
-      title: 'Product',
-      dataIndex: 'product',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (text: string) => <div className={`${text === 'success' ? " bg-green-500" : text === "pending" ? "bg-[#F29339]" : "bg-red-500"} cursor-pointer py-1 px-2 rounded-md w-fit text-white `}>{text}</div>
-    },
-  ];
-
   const tableData: DataType[] = [];
   for (let i = 0; i < 46; i++) {
     tableData.push({
@@ -63,6 +56,28 @@ const Dashboard = () => {
     }
   ]
 
+  const totalOrderAmount = orders?.reduce((total, order) => {
+    return total + order.paymentIntent.amount;
+  }, 0);
+
+  // Calculate the average order value
+  const averageOrderValue = totalOrderAmount / orders.length;
+
+  const cards = [
+    {
+      title: 'Total Sold Amount ',
+      value: `$ ${totalOrderAmount}`,
+    },
+    {
+      title: 'Average order value',
+      value: `$ ${averageOrderValue}`,
+    },
+    {
+      title: 'Total orders',
+      value: orders.length,
+    },
+  ]
+
   return (
     <div className="bg-transparent">
       <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Dashboard</h3>
@@ -77,16 +92,10 @@ const Dashboard = () => {
       </div>
       <div className="my-4">
         <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Income Statistics</h3>
-        <Chart options={options} series={series} type="bar" width="100%" />
+        <Chart options={options} series={series} type="bar" className="" />
       </div>
       <div className="my-4">
-        <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Recent Orders</h3>
-        <div>
-          <Table
-            columns={columns}
-            dataSource={tableData}
-          />
-        </div>
+        <Orders />
       </div>
     </div>
   )

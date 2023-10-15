@@ -1,4 +1,3 @@
-// import React from 'react'
 import { useState, CSSProperties, useEffect } from "react"
 import { BsArrowLeftShort } from "react-icons/bs"
 import { FcGoogle } from "react-icons/fc"
@@ -12,19 +11,16 @@ import { object, string } from 'yup';
 import CustomInput from "../../components/CustomInput"
 import { login } from "../../Redux/Reducers/auth/AuthSlice"
 import { AppDispatch, RootState } from "../../Redux/Store"
-import { UserState } from "../../Redux/Reducers/auth/AuthSlice"
 
 const LoginPage = () => {
   const dispatch: AppDispatch = useDispatch()
   const navigate = useNavigate()
   const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
-
   const [forgotpassword, setForgotPassword] = useState(false)
 
-  console.log(user);
 
   useEffect(() => {
-    if (user?._id !== null && isSuccess) {
+    if (user !== null) {
       navigate('/admin')
     }
   }, [message, user, isLoading, isError, isSuccess])

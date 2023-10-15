@@ -1,9 +1,27 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./Reducers/auth/AuthSlice"
+import customerReducer from "./Reducers/customers/customerSlice"
+import productReducer from "./Reducers/product/productSlice"
+import brandReducer from "./Reducers/brand/brandSlice"
+import PCategoryReduer from "./Reducers/pcategory/pcategorySlice"
+import colorReducer from "./Reducers/color/colorSlice"
+import blogCateReducer from "./Reducers/blogCategory/blogCatSlice"
+import blogReducer from "./Reducers/blogs/blogSlice"
+import orderReducer from "./Reducers/orders/orderSlice"
+import EnqReducer from "./Reducers/enq/enqSlice"
 
 export const Store = configureStore({
     reducer: {
-        auth: authReducer
+        auth: authReducer,
+        customer: customerReducer,
+        product: productReducer,
+        brand: brandReducer,
+        pcategory: PCategoryReduer,
+        color: colorReducer,
+        blogCat: blogCateReducer,
+        blogs: blogReducer,
+        ord: orderReducer,
+        enq: EnqReducer
     }
 
 })

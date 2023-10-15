@@ -1,42 +1,137 @@
+import { useEffect, useState } from "react"
 import type { ColumnsType } from 'antd/es/table';
 import Table from 'antd/es/table';
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai"
 
-const AllProducts = () => {
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../Redux/Store"
+import { deleteProduct, getAllProducts, openModal } from '../../Redux/Reducers/product/productSlice';
+import { useNavigate } from "react-router-dom";
+import DeleteModal from "../../components/DeleteModal";
+import ProductModal from "../../components/ProductModal";
 
-  interface DataType {
-    key: React.Key;
-    name: string;
-    product: number;
-    status: string;
+const AllProducts = () => {
+  const [del, setDel] = useState<any>(false)
+  const [id, setId] = useState("")
+  // const [edit, setEdit] = useState(false)
+
+  const dispatch: AppDispatch = useDispatch()
+  const { products, modal } = useSelector((state: RootState) => state.product)
+  const navigate = useNavigate();
+  const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteProduct(id))
+    setDel(false)
   }
-  const tableData: DataType[] = [];
-  for (let i = 0; i < 46; i++) {
+
+  useEffect(() => {
+    if (user === null) {
+      navigate('/')
+    }
+  }, [message, user, isLoading, isError, isSuccess])
+
+  useEffect(() => {
+    dispatch(getAllProducts())
+  }, [del, modal])
+
+  interface ProdDataType {
+    key: React.Key;
+    title: string;
+    price: number;
+    brand: string;
+    quantity: number;
+    category: string;
+    createdAt: string;
+    action: any;
+    totalRating: number;
+  }
+
+  const tableData: Array<ProdDataType> = [];
+
+  for (let i = 0; i < products.length; i++) {
     tableData.push({
       key: i,
-      name: `Edward King ${i}`,
-      product: 32,
-      status: i % 2 == 0 ? `success` : i % 3 == 0 ? "pending" : 'failure'
-    });
+      title: products[i].title,
+      price: products[i].price,
+      brand: products[i].brand?.title,
+      category: products[i].category?.title,
+      totalRating: products[i].totalRating,
+      quantity: products[i].quantity,
+      createdAt: new Date(products[i].createdAt).toLocaleDateString(),
+      action: (
+        <div className="flex space-x-2">
+          <li className="cursor-pointer hover:text-blue-500" onClick={() => {
+            dispatch(openModal(true))
+            setId(products[i])
+          }} >
+            <AiOutlineEdit size={20} />
+          </li>
+          <li className="cursor-pointer hover:text-blue-500" >
+            <AiOutlineDelete size={20} onClick={() => {
+              setDel(true)
+              setId(products[i]._id)
+            }} />
+          </li>
+        </div >
+      )
+    })
   }
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<ProdDataType> = [
     {
       title: 'SNO.',
       dataIndex: 'key',
       render: (text: string) => <a>{text}</a>,
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: 'Title',
+      dataIndex: 'title',
+      render: (text: string) => <p className="line-clamp-2 text-justify">{text}</p>,
+      sorter: (a, b) => a.title.length - b.title.length
     },
     {
-      title: 'Product',
-      dataIndex: 'product',
+      title: 'Price',
+      dataIndex: 'price',
+      sorter: (a, b) => a.price - b.price
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (text: string) => <div className={`${text === 'success' ? " bg-green-500" : text === "pending" ? "bg-[#F29339]" : "bg-red-500"} cursor-pointer py-1 px-2 rounded-md w-fit text-white `}>{text}</div>
+      title: 'Brand',
+      dataIndex: 'brand',
+    },
+    {
+      title: 'Category',
+      dataIndex: 'category',
+    },
+    {
+      title: 'Rating',
+      dataIndex: 'totalRating',
+      sorter: (a, b) => a.totalRating - b.totalRating
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      sorter: (a, b) => a.quantity - b.quantity
+    },
+    {
+      title: 'Date',
+      dataIndex: 'createdAt',
+      sorter: (a, b) => {
+        const nameA = a.createdAt
+        const nameB = b.createdAt
+
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      }
+
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
     },
   ];
   return (
@@ -47,6 +142,9 @@ const AllProducts = () => {
           columns={columns}
           dataSource={tableData}
         />
+        <DeleteModal openModal={setDel} modal={del} onClick={() => handleDelete(id)} />
+        <ProductModal prod={id} />
+
       </div>
     </div>
   )

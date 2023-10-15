@@ -27,6 +27,7 @@ import AddColor from './pages/Colors/AddColor';
 import AddProdCategory from './pages/product/AddCategory';
 import AddBrand from './pages/Brands/AddBrand';
 import Enquries from './pages/Dashboard/Enquries';
+import Errorpage from './components/ErrorPage';
 
 function App() {
   return (
@@ -49,13 +50,14 @@ function App() {
           <Route path="/admin/brandlist" element={<BrandList />} /> 
           <Route path="/admin/productlist" element={<AllProducts />} />
           <Route path="/admin/blog" element={<AddBlog />} />  
-          <Route path="/admin/product" element={<AddProduct />} />  
           <Route path="/admin/blog-category" element={<AddBlogCat />} />  
-          <Route path="/admin/color" element={<AddColor />} />  
-          <Route path="/admin/category" element={<AddProdCategory />} />  
-          <Route path="/admin/brand" element={<AddBrand />} />  
-          <Route path="/admin/enquiries" element={<Enquries />} />  
+          <Route path="/admin/product" element={<AddProduct />} />  
+          <Route path="/admin/color" element={<AddColor />} />
+          <Route path="/admin/category" element={<AddProdCategory />} /> 
+          <Route path="/admin/brand" element={<AddBrand />} />
+          <Route path="/admin/enquiries" element={<Enquries />} />
         </Route>
+        <Route path="*" element={<Errorpage />} />
       </Routes>
     </>
   )

@@ -6,7 +6,6 @@ import { GoArrowDownRight } from "react-icons/go"
 const SalesCard = ({ title, value }: any) => {
     const [sales, setSales] = useState(6);
     const [dropdown, setDropDown] = useState(false)
-    console.log(dropdown);
 
     return (
         <div className="p-2 border hover:border-none cursor-pointer transition-all delay-75 duration-300 hover:scale-95 bg-gradient-to-r from-gray-100 to-slate-100 hover:bg-gradient-to-r hover:from-slate-300 hover:to-green-400 flex flex-col gap-4 justify-between bg-white rounded-md shadow-md w-full">

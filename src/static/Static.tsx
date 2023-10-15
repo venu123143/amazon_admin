@@ -1,17 +1,4 @@
-export const cards = [
-    {
-        title:'Total sells',
-        value:'$ 3400.00',
-    },
-    {
-        title:'Average order value',
-        value:'$ 272.89',
-    },
-    {
-        title:'Total orders',
-        value:'573',
-    },
-]
+
 export  const data = [
     {
       type: 'Jan',

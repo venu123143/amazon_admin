@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AiOutlineDashboard, AiOutlineShoppingCart,AiOutlineUpload, AiOutlineBgColors, AiOutlineQuestionCircle, AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai"
+import React, { useState, CSSProperties } from 'react';
+import { AiOutlineDashboard, AiOutlineShoppingCart, AiOutlineUpload, AiOutlineBgColors, AiOutlineQuestionCircle, AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai"
 import { BsPerson, BsBagCheck, BsSearch } from "react-icons/bs"
 import { BiCategory, BiLogoBlogger, BiCategoryAlt } from "react-icons/bi"
 import { LiaCartPlusSolid } from "react-icons/lia"
@@ -13,10 +13,15 @@ import { IoIosNotifications } from "react-icons/io"
 import profile from "../../assets/profile.jpg"
 import { Layout, Menu, Button } from 'antd';
 import { useNavigate, Outlet, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../Redux/Reducers/auth/AuthSlice';
+import { AppDispatch, RootState } from '../../Redux/Store';
+import { SyncLoader } from 'react-spinners';
 const { Header, Sider, Content } = Layout;
 
 const MainLayout: React.FC = () => {
     const navigagte = useNavigate()
+    const dispatch: AppDispatch = useDispatch()
     const [collapsed, setCollapsed] = useState(false);
     const [dropdown, setDropDown] = useState(false);
 
@@ -30,7 +35,20 @@ const MainLayout: React.FC = () => {
     const colors = ["red", "blue", "green", "yellow", 'pink'];
     const randomIndex = Math.floor(Math.random() * colors.length);
     const randomColor = colors[randomIndex];
-    console.log("Random color:", randomColor);
+    const { isLoading, user } = useSelector((state: RootState) => state.auth)
+    const override: CSSProperties = {
+        display: "block",
+        margin: "0 auto",
+        borderColor: "red",
+        width: 380,
+        position: 'absolute',
+        top: "50%",
+        left: "50%",
+        transform: 'translateX(-50%, -50%)'
+    };
+    const handleSignOut = () => {
+        dispatch(logout())
+    }
     return (
         <Layout className='w-full no-scrollbar '>
             <Sider className='h-screen  overflow-y-scroll' trigger={null} collapsible collapsed={collapsed} >
@@ -181,12 +199,12 @@ const MainLayout: React.FC = () => {
                 />
             </Sider>
 
-            <Layout className='w-full p-0 m-0 '>
+            <Layout className=''>
                 {/* header  */}
                 <Header style={{ padding: 0 }} className='flex bg-[#fff] justify-between '>
                     <div className='flex justify-center items-center'>
                         <Button type="text"
-                            icon={collapsed ? <AiOutlineMenuUnfold  size={20} /> : <AiOutlineMenuFold size={20} />}
+                            icon={collapsed ? <AiOutlineMenuUnfold size={20} /> : <AiOutlineMenuFold size={20} />}
                             onClick={() => setCollapsed(!collapsed)}
                             style={{
                                 fontSize: '16px',
@@ -222,8 +240,8 @@ const MainLayout: React.FC = () => {
                                 <img src={profile} alt="profile image" className='w-[40px] h-[40px]' />
                             </div>
                             <div className='name leading-5'>
-                                <h3 className='text-[1rem]  font-Rubik mb-0 font-[500]'>Venu gopal reddy</h3>
-                                <span className='mb-0 text-[#6c757d]' >venugopalreddy9493@gmail.com</span>
+                                <h3 className='text-[1rem]  font-Rubik mb-0 font-[500]'>{user?.firstname} {user?.lastname}</h3>
+                                <span className='mb-0 text-[#6c757d]' >{user?.email}</span>
                             </div>
                             {
                                 dropdown && (
@@ -236,7 +254,7 @@ const MainLayout: React.FC = () => {
                                                 <Link to="/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Change Settings</Link>
                                             </li>
                                             <li>
-                                                <Link to="/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</Link>
+                                                <span onClick={handleSignOut} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -247,10 +265,19 @@ const MainLayout: React.FC = () => {
                     </div>
                 </Header>
                 {/* content */}
-                <Content className=''
-                    style={{ margin: '24px 16px', padding: 24, minHeight: 280, overflowY: 'auto' }}>
+                <Content className='p-5 ' style={{ minHeight: 280, overflowY: 'auto' }}>
                     <Outlet />
                 </Content>
+                <div className={`${isLoading === true ? "block bg-black opacity-50 absolute top-0 left-0 w-full h-screen" : "hidden"}`}>
+                    <SyncLoader
+                        color="#361AE3"
+                        loading={isLoading}
+                        cssOverride={override}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                    />
+
+                </div>
             </Layout>
         </Layout>
     );
