@@ -59,7 +59,7 @@ const getEnquirySlice = createSlice({
         })
         builder.addCase(delEnquiry.pending, (state) => {
             state.isLoading = true
-        }).addCase(delEnquiry.fulfilled, (state, action: PayloadAction<any>) => {
+        }).addCase(delEnquiry.fulfilled, (state) => {
             state.isLoading = false
             state.isSuccess = true
             state.isError = false

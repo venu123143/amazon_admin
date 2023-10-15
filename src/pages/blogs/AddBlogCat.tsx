@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect } from 'react'
+import { CSSProperties, useEffect } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { object, string } from 'yup'
 import { useFormik } from 'formik'

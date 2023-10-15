@@ -1,13 +1,12 @@
-import { useState, CSSProperties } from "react"
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
+import { CSSProperties } from "react"
 import { BsArrowLeftShort } from "react-icons/bs"
 import { Link } from "react-router-dom"
 import { BarLoader } from "react-spinners"
 import CustomInput from "../../components/CustomInput"
+import { useSelector } from "react-redux"
+import { RootState } from "../../Redux/Store"
 const ResetPassword = () => {
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const { isLoading } = useSelector((state: RootState) => state.auth)
 
   const override: CSSProperties = {
     display: "block",
@@ -27,7 +26,7 @@ const ResetPassword = () => {
         <div className="w-full bg-white rounded-lg shadow-lg border  dark:border md:mt-0 sm:max-w-sm xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <BarLoader
             color="#361AE3"
-            loading={loading}
+            loading={isLoading}
             cssOverride={override}
             aria-label="Loading Spinner"
             data-testid="loader"
@@ -36,7 +35,6 @@ const ResetPassword = () => {
             <h1 className="text-xl font-bold leading-tight text-center tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create New Password
             </h1>
-            <p className={`${error === true ? "block" : "hidden"} text-red-600`}>Min 1 (upper, lower, num, symbol)</p>
             <form action="#" className="space-y-4 md:space-y-6" >
               <CustomInput id="forgotpassword" classname="forgotpassword" type="password" placeholder="Enter your password" />
               <CustomInput id="forgotpassword" classname="forgotpassword" type="password" placeholder="Re-Enter your password" />

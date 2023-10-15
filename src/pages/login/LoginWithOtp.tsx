@@ -1,14 +1,16 @@
 // import React from 'react'
 import { useState, useRef, useEffect, CSSProperties } from "react"
 import { BsArrowLeftShort } from "react-icons/bs"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { BarLoader } from "react-spinners"
+import { RootState } from "../../Redux/Store"
 
 const LoginWithOtp = () => {
     const [sendOtp, setSendOtp] = useState(false)
     const [otp, setOtp] = useState<string[]>(new Array(6).fill(""))
     const codesRef = useRef<any>([]);
-    const [loading, setLoading] = useState(false)
+    const { isLoading } = useSelector((state: RootState) => state.auth)
 
     const override: CSSProperties = {
         display: "block",
@@ -52,7 +54,7 @@ const LoginWithOtp = () => {
                     <div className="w-full bg-white rounded-lg shadow-lg border  dark:border md:mt-0 sm:max-w-sm xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <BarLoader
                             color="#361AE3"
-                            loading={loading}
+                            loading={isLoading}
                             cssOverride={override}
                             aria-label="Loading Spinner"
                             data-testid="loader"

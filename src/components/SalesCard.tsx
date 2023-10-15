@@ -5,6 +5,8 @@ import { GoArrowDownRight } from "react-icons/go"
 
 const SalesCard = ({ title, value }: any) => {
     const [sales, setSales] = useState(6);
+    console.log(setSales);
+
     const [dropdown, setDropDown] = useState(false)
 
     return (

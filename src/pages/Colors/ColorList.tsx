@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { ColumnsType } from 'antd/es/table';
 import Table from 'antd/es/table';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../Redux/Store';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteColor, editColor, getColors } from '../../Redux/Reducers/color/colorSlice';

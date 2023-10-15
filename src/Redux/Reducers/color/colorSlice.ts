@@ -80,7 +80,7 @@ const getColorsSlice = createSlice({
         })
         builder.addCase(createColor.pending, (state) => {
             state.isLoading = true
-        }).addCase(createColor.fulfilled, (state, action: PayloadAction<any>) => {
+        }).addCase(createColor.fulfilled, (state) => {
             state.isLoading = false
             state.isSuccess = true
             state.isError = false

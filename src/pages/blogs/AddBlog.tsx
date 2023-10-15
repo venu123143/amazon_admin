@@ -1,5 +1,5 @@
 import 'react-quill/dist/quill.snow.css';
-import React, { CSSProperties, useEffect } from 'react'
+import { CSSProperties, useEffect } from 'react'
 import { toast } from "react-toastify";
 
 import CustomInput from '../../components/CustomInput'

@@ -5,7 +5,7 @@ import Table from 'antd/es/table';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../Redux/Store';
 import { deleteCategory, getCategories } from "../../Redux/Reducers/pcategory/pcategorySlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import DeleteModal from "../../components/DeleteModal";
 import EditModal from "../../components/EditModal";

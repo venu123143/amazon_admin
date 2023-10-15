@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react'
+import { CSSProperties } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
