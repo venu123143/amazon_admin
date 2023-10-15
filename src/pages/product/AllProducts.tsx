@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import type { ColumnsType } from 'antd/es/table';
 import Table from 'antd/es/table';
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai"
@@ -20,10 +20,10 @@ const AllProducts = () => {
   const navigate = useNavigate();
   const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
 
-  const handleDelete = (id: string) => {
+  const handleDelete = useCallback((id: string) => {
     dispatch(deleteProduct(id))
     setDel(false)
-  }
+  }, [dispatch]);
 
   useEffect(() => {
     if (user === null) {
@@ -47,36 +47,38 @@ const AllProducts = () => {
     totalRating: number;
   }
 
-  const tableData: Array<ProdDataType> = [];
-
-  for (let i = 0; i < products.length; i++) {
-    tableData.push({
-      key: i,
-      title: products[i].title,
-      price: products[i].price,
-      brand: products[i].brand?.title,
-      category: products[i].category?.title,
-      totalRating: products[i].totalRating,
-      quantity: products[i].quantity,
-      createdAt: new Date(products[i].createdAt).toLocaleDateString(),
-      action: (
-        <div className="flex space-x-2">
-          <li className="cursor-pointer hover:text-blue-500" onClick={() => {
-            dispatch(openModal(true))
-            setId(products[i])
-          }} >
-            <AiOutlineEdit size={20} />
-          </li>
-          <li className="cursor-pointer hover:text-blue-500" >
-            <AiOutlineDelete size={20} onClick={() => {
-              setDel(true)
-              setId(products[i]._id)
-            }} />
-          </li>
-        </div >
-      )
-    })
-  }
+  const tableData: Array<ProdDataType> = useMemo(() => {
+    const data = [];
+    for (let i = 0; i < products.length; i++) {
+      data.push({
+        key: i,
+        title: products[i].title,
+        price: products[i].price,
+        brand: products[i].brand?.title,
+        category: products[i].category?.title,
+        totalRating: products[i].totalRating,
+        quantity: products[i].quantity,
+        createdAt: new Date(products[i].createdAt).toLocaleDateString(),
+        action: (
+          <div className="flex space-x-2">
+            <li className="cursor-pointer hover:text-blue-500" onClick={() => {
+              dispatch(openModal(true));
+              setId(products[i]);
+            }} >
+              <AiOutlineEdit size={20} />
+            </li>
+            <li className="cursor-pointer hover:text-blue-500" >
+              <AiOutlineDelete size={20} onClick={() => {
+                setDel(true);
+                setId(products[i]._id);
+              }} />
+            </li>
+          </div>
+        )
+      });
+    }
+    return data;
+  }, [products, dispatch]);
   const columns: ColumnsType<ProdDataType> = [
     {
       title: 'SNO.',
@@ -86,7 +88,7 @@ const AllProducts = () => {
     {
       title: 'Title',
       dataIndex: 'title',
-      render: (text: string) => <p className="line-clamp-2 text-justify">{text}</p>,
+      render: (text: string) => <p className="line-clamp-2 text-justify max-w-sm">{text}</p>,
       sorter: (a, b) => a.title.length - b.title.length
     },
     {

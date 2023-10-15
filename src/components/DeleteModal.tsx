@@ -1,3 +1,4 @@
+import React from "react"
 import { RxCross2 } from "react-icons/rx"
 import { BiErrorAlt } from "react-icons/bi"
 const DeleteModal = ({ openModal, modal, onClick }: any) => {
@@ -27,4 +28,4 @@ const DeleteModal = ({ openModal, modal, onClick }: any) => {
     )
 }
 
-export default DeleteModal
+export default React.memo(DeleteModal);

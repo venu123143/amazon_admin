@@ -1,4 +1,4 @@
-import { useEffect, useState, CSSProperties } from 'react'
+import React, { useEffect, useState, CSSProperties, useMemo, useCallback } from 'react'
 import Select from 'react-select';
 import { toast } from "react-toastify"
 import { useFormik } from 'formik';
@@ -39,9 +39,8 @@ const ProductModal = ({ prod }: any) => {
     const { categories } = useSelector((state: RootState) => state.pcategory)
     const { colors } = useSelector((state: RootState) => state.color)
 
-    // console.log("isLoading = ", isLoading, "isSucess = ", isSuccess, "modal = ", modal);
-    let options = colors.map((color) => ({ value: color._id, label: color.title }))
-    let value = color.map((clr: any) => (clr.value))
+    const options = useMemo(() => colors.map(color => ({ value: color._id, label: color.title })), [colors]);
+    const value = useMemo(() => color.map((clr: any) => clr.value), [color]);
 
     const override: CSSProperties = {
         display: "block",
@@ -67,8 +66,12 @@ const ProductModal = ({ prod }: any) => {
         if (images.length !== 0)
             formik.values.images = images
     }, [color, tags, images])
-
-
+    type Image = {
+        url: string;
+        asset_id: string;
+        public_id: string;
+    };
+    // arr1.concat(arr2);
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -79,7 +82,7 @@ const ProductModal = ({ prod }: any) => {
             brand: '',
             color: [],
             tags: [],
-            images: []
+            images: [] as (Image | File)[],
         },
         validationSchema: userSchema,
         onSubmit: values => {
@@ -92,10 +95,16 @@ const ProductModal = ({ prod }: any) => {
             formData.append('price', JSON.stringify(values.price));
             formData.append('color', JSON.stringify(values.color));
             formData.append('tags', JSON.stringify(values.tags));
+            console.log(prod?.images);
 
-            // Append each image with the key "images"
             for (let i = 0; i < values.images.length; i++) {
-                formData.append('images', values.images[i]);
+                const image = values.images[i];
+                if ('url' in image) {
+                    formData.append('existingImg', JSON.stringify(prod?.images[i]));
+                }
+                else {
+                    formData.append('images', values.images[i] as File);
+                }
             }
             dispatch(editProduct({ id: prod?._id as string, data: formData }));
             formik.resetForm();
@@ -103,6 +112,8 @@ const ProductModal = ({ prod }: any) => {
         },
 
     });
+    // console.log(prod.images);
+
     useEffect(() => {
         formik.setValues({
             title: prod?.title || '',
@@ -128,14 +139,12 @@ const ProductModal = ({ prod }: any) => {
         }
     }, [prod]);
 
-
-    console.log(formik.values.images);
-    const handleRemoveImg = (id: number) => {
+    const handleRemoveImg = useCallback((id: number) => {
         const imagesCopy = [...formik.values.images];
         imagesCopy.splice(id, 1);
         formik.setFieldValue("images", imagesCopy);
+    }, [formik.values.images]);
 
-    }
     return (
         <>
             <div className={`max-h-[500px] overflow-y-scroll absolute top-1/2 left-1/2   -translate-x-1/2 -translate-y-1/2 w-full z-20 transition-all ease-in ${modal === true ? "scale-100 duration-200" : "scale-0 duration-200"}  p-4 bg-white overflow-x-hidden overflow-y-auto rounded-md min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px] `}
@@ -240,13 +249,15 @@ const ProductModal = ({ prod }: any) => {
                         ) : null}
                     </div>
                     {/* images */}
-                    {/* grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 */}
                     <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
-                        {/* <div className='grid gap-4 bg-black'> */}
-                        {formik.values.images?.map((each: { url: string }, index) => (
-                            <div className='inline-block justify-center items-center bg-black'>
-                                <div key={index} className="relative ">
-                                    <img src={each?.url} alt="" className="max-w-full h-auto align-middle inline-block rounded-lg object-cover object-center " />
+                        {formik.values?.images?.map((each: any, index: number) => (
+                            <div key={index} className='inline-flex justify-center'>
+                                <div className="relative ">
+                                    {each.url ? (
+                                        <img src={each?.url} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                    ) : (
+                                        <img src={URL.createObjectURL(each)} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                    )}
                                     <RxCross2 onClick={() => handleRemoveImg(index)}
                                         className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full"
                                         size={35}
@@ -254,26 +265,21 @@ const ProductModal = ({ prod }: any) => {
                                 </div>
                             </div>
                         ))}
-                        {/* </div> */}
-                        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {formik.values.images?.map((each: { url: string }, index) => (
-                                <div key={index} className="grid gap-4">
-                                    <div>
-                                        <img
-                                            src={each?.url}
-                                            alt=""
-                                            className="h-auto max-w-full rounded-lg"
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </div> */}
+
+                        {/* Display newly uploaded images and allow users to remove them */}
+                        {/* {images.map((file: any, index: number) => (
+                            <div key={index} className="relative">
+                                <img src={URL.createObjectURL(file)} alt="" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                <RxCross2 onClick={() => setImages((prevImages) => prevImages.filter((_, i) => i !== index))} className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full" size={35} />
+                            </div>
+                        ))} */}
                     </div>
+
                     <Dropzone onDrop={acceptedFiles => {
                         toast.success("images added", {
                             position: 'top-right'
                         })
-                        setImages(acceptedFiles)
+                        setImages([...prod?.images, ...acceptedFiles])
                     }}>
                         {({ getRootProps, getInputProps }) => (
                             <div className="flex items-center justify-center w-full" {...getRootProps()}>
@@ -309,4 +315,4 @@ const ProductModal = ({ prod }: any) => {
     )
 }
 
-export default ProductModal
+export default React.memo(ProductModal);

@@ -117,9 +117,8 @@ const productSlice = createSlice({
             state.isLoading = false
             state.isSuccess = false
             state.isError = true
-            state.message = action.payload
-
-            toast.success("failed to create product, Try Again..!", {
+            state.message = action.payload?.message
+            toast.error(state.message, {
                 position: 'top-right'
             })
         })
