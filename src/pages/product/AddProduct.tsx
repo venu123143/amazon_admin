@@ -1,13 +1,16 @@
-import { useEffect, useState, CSSProperties } from 'react'
+import { useEffect, useState, CSSProperties, useCallback } from 'react'
 import Select from 'react-select';
 import { toast } from "react-toastify";
-
 import { useFormik } from 'formik';
 import ReactQuill from 'react-quill';
 import Dropzone from 'react-dropzone'
 import { array, number, object, string } from 'yup';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
+import { SyncLoader } from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
+import { RxCross2 } from 'react-icons/rx';
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
 
 import { AppDispatch, RootState } from '../../Redux/Store';
 import CustomInput from '../../components/CustomInput'
@@ -16,8 +19,6 @@ import { getColors } from '../../Redux/Reducers/color/colorSlice';
 import { getAllBrands } from '../../Redux/Reducers/brand/brandSlice';
 import { getCategories } from '../../Redux/Reducers/pcategory/pcategorySlice';
 import { createProduct } from '../../Redux/Reducers/product/productSlice';
-import { SyncLoader } from 'react-spinners';
-import { useNavigate } from 'react-router-dom';
 
 
 let userSchema = object({
@@ -45,7 +46,7 @@ const AddProduct = () => {
       navigate('/')
     }
   }, [message, user, isError, isSuccess])
-  
+
   const { isLoading } = useSelector((state: RootState) => state.product)
   const { brands } = useSelector((state: RootState) => state.brand)
   const { categories } = useSelector((state: RootState) => state.pcategory)
@@ -75,7 +76,8 @@ const AddProduct = () => {
     if (tags.length !== 0)
       formik.values.tags = tags
     if (images.length !== 0)
-      formik.values.images = images
+      // formik.values.images = images
+      formik.setFieldValue('images', images);
   }, [color, tags, images])
 
   const formik = useFormik({
@@ -111,7 +113,44 @@ const AddProduct = () => {
       setTags([])
     },
   });
+  const handleRemoveImg = useCallback((id: number) => {
+    const imagesCopy = [...formik.values.images];
+    imagesCopy.splice(id, 1);
+    formik.setFieldValue("images", imagesCopy);
+  }, [formik.values.images]);
 
+
+
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentImage, setCurrentImage] = useState(images[0]);
+  const closeFullscreen = () => {
+    setCurrentIndex(null);
+    setIsFullscreen(false);
+    setCurrentImage(null);
+  };
+  var nextImage = () => {
+    if (currentIndex! < images.length - 1) {
+      setCurrentIndex(currentIndex! + 1);
+      setCurrentImage(URL.createObjectURL(images[currentIndex! + 1]));
+    }
+    else if (currentIndex! >= images.length - 1) {
+      setIsFullscreen(false);
+    }
+  };
+  var prevImage = () => {
+    if (currentIndex! > 0) {
+      setCurrentIndex(currentIndex! - 1);
+      setCurrentImage(URL.createObjectURL(images[currentIndex! - 1]));
+    } else if (currentIndex! <= 0) {
+      setIsFullscreen(false);
+    }
+  };
+  var handleSetImage = (index: number) => {
+    setCurrentIndex(index);
+    setIsFullscreen(true);
+    setCurrentImage(URL.createObjectURL(images[index]));
+  };
   return (
     <div>
       <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Product</h3>
@@ -205,12 +244,44 @@ const AddProduct = () => {
             <div className="text-red-500 text-[14px] ">{formik.errors.brand}</div>
           ) : null}
 
-
+          {/* big image */}
+          <div className={` fixed -top-2 left-0 w-full h-full bg-black bg-opacity-80 z-50 ${isFullscreen ? "active" : "hidden"}`}>
+            <div className="fullscreen-modal">
+              <img
+                src={currentImage}
+                alt={`Image ${currentIndex! + 1}`}
+                className="fullscreen-image"
+              />
+              <span className="close-button p-2 rounded-full bg-gray-300 text-black" onClick={closeFullscreen}>
+                <RxCross2 />
+              </span>
+              <span className="prev-button p-2 rounded-full bg-gray-300 text-black" onClick={prevImage}>
+                <AiOutlineLeft />
+              </span>
+              <span className="next-button p-2 rounded-full bg-gray-300 text-black" onClick={nextImage}>
+                <AiOutlineRight />
+              </span>
+            </div>
+          </div>
           {/* upload images*/}
           <label htmlFor="AddImages" className="block text-sm font-medium text-gray-900">
             Add Images <span className="text-red-500 text-lg">*</span>
           </label>
-
+          <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
+            {formik.values?.images?.map((each: any, index: number) => (
+              <div key={index} className='inline-flex justify-center'>
+                <div className="relative">
+                  <img src={URL.createObjectURL(each)} onClick={() => {
+                    handleSetImage(index);
+                  }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                  <RxCross2 onClick={() => handleRemoveImg(index)}
+                    className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full"
+                    size={35}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
           <Dropzone onDrop={acceptedFiles => {
             toast.success("images added", {
               position: 'top-right'

@@ -7,7 +7,6 @@ import Dropzone from 'react-dropzone'
 import { array, number, object, string } from 'yup';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { AppDispatch, RootState } from '../Redux/Store';
 import AddTags from './AddTags';
 import { SyncLoader } from 'react-spinners';
@@ -26,7 +25,7 @@ let userSchema = object({
     brand: string().required('Please Select the brand'),
     category: string().required('Please Select the Category'),
     quantity: number().required('Enter the quantity'),
-    tags: array().min(1, 'Add atleast one tag').required(''),
+    tags: array().min(1, 'Add atleast one tag').required('')
 });
 const ProductModal = ({ prod }: any) => {
     const [color, setColor] = useState<any>([])
@@ -63,8 +62,10 @@ const ProductModal = ({ prod }: any) => {
             formik.values.color = value
         if (tags.length !== 0)
             formik.values.tags = tags
-        if (images.length !== 0)
-            formik.values.images = images
+        if (images.length !== 0) {
+            // formik.values.images = images
+            formik.setFieldValue('images', images);
+        }
     }, [color, tags, images])
     type Image = {
         url: string;
@@ -95,8 +96,6 @@ const ProductModal = ({ prod }: any) => {
             formData.append('price', JSON.stringify(values.price));
             formData.append('color', JSON.stringify(values.color));
             formData.append('tags', JSON.stringify(values.tags));
-            console.log(prod?.images);
-
             for (let i = 0; i < values.images.length; i++) {
                 const image = values.images[i];
                 if ('url' in image) {
@@ -252,7 +251,7 @@ const ProductModal = ({ prod }: any) => {
                     <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
                         {formik.values?.images?.map((each: any, index: number) => (
                             <div key={index} className='inline-flex justify-center'>
-                                <div className="relative ">
+                                <div className="relative">
                                     {each.url ? (
                                         <img src={each?.url} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
                                     ) : (
@@ -265,14 +264,6 @@ const ProductModal = ({ prod }: any) => {
                                 </div>
                             </div>
                         ))}
-
-                        {/* Display newly uploaded images and allow users to remove them */}
-                        {/* {images.map((file: any, index: number) => (
-                            <div key={index} className="relative">
-                                <img src={URL.createObjectURL(file)} alt="" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
-                                <RxCross2 onClick={() => setImages((prevImages) => prevImages.filter((_, i) => i !== index))} className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full" size={35} />
-                            </div>
-                        ))} */}
                     </div>
 
                     <Dropzone onDrop={acceptedFiles => {
@@ -280,6 +271,7 @@ const ProductModal = ({ prod }: any) => {
                             position: 'top-right'
                         })
                         setImages([...prod?.images, ...acceptedFiles])
+
                     }}>
                         {({ getRootProps, getInputProps }) => (
                             <div className="flex items-center justify-center w-full" {...getRootProps()}>

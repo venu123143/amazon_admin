@@ -1,4 +1,3 @@
-import { CSSProperties, useMemo } from "react"
 export const data = [
   {
     type: 'Jan',
@@ -46,16 +45,3 @@ export const data = [
   },
 ];
 
-export const override: CSSProperties = useMemo(
-  () => ({
-    display: 'block',
-    margin: '0 auto',
-    borderColor: 'red',
-    width: 380,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translateX(-50%, -50%)',
-  }),
-  []
-);

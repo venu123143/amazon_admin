@@ -131,3 +131,73 @@ main::-webkit-scrollbar {
 }
 
 /* end grid images */
+
+
+/* Fullscreen overlay */
+.fullscreen-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+  }
+  
+  .fullscreen-overlay.active {
+    display: block;
+  }
+  
+  /* Fullscreen modal */
+  .fullscreen-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+  }
+  
+  /* Fullscreen image */
+  .fullscreen-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+  
+  /* Close button */
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+  }
+  
+  /* Previous and Next buttons */
+  .prev-button,
+  .next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+  }
+  
+  .prev-button {
+    left: 10px;
+  }
+  
+  .next-button {
+    right: 10px;
+  }
+  
+  /* Thumbnail images */
+  .thumbnail {
+    max-width: 100px;
+    cursor: pointer;
+    margin: 5px;
+  }
