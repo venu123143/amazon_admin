@@ -1,6 +1,6 @@
 import React, { useState, CSSProperties } from 'react';
 import { AiOutlineDashboard, AiOutlineShoppingCart, AiOutlineUpload, AiOutlineBgColors, AiOutlineQuestionCircle, AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai"
-import { BsPerson, BsBagCheck, BsSearch } from "react-icons/bs"
+import { BsPerson, BsBagCheck, BsSearch, BsTicket } from "react-icons/bs"
 import { BiCategory, BiLogoBlogger, BiCategoryAlt } from "react-icons/bi"
 import { LiaCartPlusSolid } from "react-icons/lia"
 import { SiBrandfolder } from "react-icons/si"
@@ -8,7 +8,7 @@ import { FiList } from "react-icons/fi"
 import { FaBlogger, FaListOl } from "react-icons/fa"
 import { IoColorPaletteOutline } from "react-icons/io5"
 import { GiIndiaGate } from "react-icons/gi"
-import { IoIosNotifications } from "react-icons/io"
+import { IoIosNotifications, IoMdCreate } from "react-icons/io"
 
 import profile from "../../assets/profile.jpg"
 import { Layout, Menu, Button } from 'antd';
@@ -187,6 +187,20 @@ const MainLayout: React.FC = () => {
 
                                 },
                             ]
+                        },
+                        {
+                            key: 'create-coupon',
+                            icon: <IoMdCreate  size={20} className="" />,
+                            label: 'Create Coupon',
+                            className: `${pathName == "/admin/create-coupon" ? "ant-menu-item-selected" : null}`
+
+                        },
+                        {
+                            key: 'coupons',
+                            icon: <BsTicket size={20} className="" />,
+                            label: 'Coupons',
+                            className: `${pathName == "/admin/coupons" ? "ant-menu-item-selected" : null}`
+
                         },
                         {
                             key: 'enquiries',

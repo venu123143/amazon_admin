@@ -9,6 +9,7 @@ import blogCateReducer from "./Reducers/blogCategory/blogCatSlice"
 import blogReducer from "./Reducers/blogs/blogSlice"
 import orderReducer from "./Reducers/orders/orderSlice"
 import EnqReducer from "./Reducers/enq/enqSlice"
+import CouponReducer from "./Reducers/coupons/CouponSlice"
 
 export const Store = configureStore({
     reducer: {
@@ -21,7 +22,8 @@ export const Store = configureStore({
         blogCat: blogCateReducer,
         blogs: blogReducer,
         ord: orderReducer,
-        enq: EnqReducer
+        enq: EnqReducer,
+        coupon: CouponReducer
     }
 
 })

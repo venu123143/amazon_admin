@@ -28,6 +28,8 @@ import AddProdCategory from './pages/product/AddCategory';
 import AddBrand from './pages/Brands/AddBrand';
 import Enquries from './pages/Dashboard/Enquries';
 import Errorpage from './components/ErrorPage';
+import AddCoupon from './pages/coupons/AddCoupon';
+import CouponList from './pages/coupons/CouponList';
 
 function App() {
   return (
@@ -56,6 +58,8 @@ function App() {
           <Route path="/admin/category" element={<AddProdCategory />} /> 
           <Route path="/admin/brand" element={<AddBrand />} />
           <Route path="/admin/enquiries" element={<Enquries />} />
+          <Route path="/admin/coupons" element={<CouponList />} />
+          <Route path="/admin/create-coupon" element={<AddCoupon />} />
         </Route>
         <Route path="*" element={<Errorpage />} />
       </Routes>

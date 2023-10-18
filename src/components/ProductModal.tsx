@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import ReactQuill from 'react-quill';
 import Dropzone from 'react-dropzone'
 import { array, number, object, string } from 'yup';
-import { AiOutlineCloudUpload } from 'react-icons/ai';
+import { AiOutlineCloudUpload, AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../Redux/Store';
 import AddTags from './AddTags';
@@ -144,6 +144,41 @@ const ProductModal = ({ prod }: any) => {
         formik.setFieldValue("images", imagesCopy);
     }, [formik.values.images]);
 
+
+
+
+
+    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [currentImage, setCurrentImage] = useState(images[0]);
+    const closeFullscreen = () => {
+        setCurrentIndex(null);
+        setIsFullscreen(false);
+        setCurrentImage(null);
+    };
+    var nextImage = () => {
+        if (currentIndex! < images.length - 1) {
+            setCurrentIndex(currentIndex! + 1);
+            setCurrentImage(images[currentIndex! + 1]);
+        }
+        else if (currentIndex! >= images.length - 1) {
+            setIsFullscreen(false);
+        }
+    };
+    var prevImage = () => {
+        if (currentIndex! > 0) {
+            setCurrentIndex(currentIndex! - 1);
+            setCurrentImage(images[currentIndex! - 1]);
+        } else if (currentIndex! <= 0) {
+            setIsFullscreen(false);
+        }
+    };
+    var handleSetImage = (index: number) => {
+        setCurrentIndex(index);
+        setIsFullscreen(true);
+        setCurrentImage(images[index]);
+    };
+
     return (
         <>
             <div className={`max-h-[500px] overflow-y-scroll absolute top-1/2 left-1/2   -translate-x-1/2 -translate-y-1/2 w-full z-20 transition-all ease-in ${modal === true ? "scale-100 duration-200" : "scale-0 duration-200"}  p-4 bg-white overflow-x-hidden overflow-y-auto rounded-md min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px] `}
@@ -247,15 +282,39 @@ const ProductModal = ({ prod }: any) => {
                             <div className="text-red-500 text-[14px] ">{formik.errors.brand}</div>
                         ) : null}
                     </div>
+
+                    {/* big image */}
+                    <div className={` fixed -top-2 left-0 w-full h-full bg-black bg-opacity-80 z-50 ${isFullscreen ? "active" : "hidden"}`}>
+                        <div className="fullscreen-modal">
+                            <img
+                                src={currentImage}
+                                alt={`Image ${currentIndex! + 1}`}
+                                className="fullscreen-image"
+                            />
+                            <span className="close-button p-2 rounded-full bg-gray-300 text-black" onClick={closeFullscreen}>
+                                <RxCross2 />
+                            </span>
+                            <span className="prev-button p-2 rounded-full bg-gray-300 text-black" onClick={prevImage}>
+                                <AiOutlineLeft />
+                            </span>
+                            <span className="next-button p-2 rounded-full bg-gray-300 text-black" onClick={nextImage}>
+                                <AiOutlineRight />
+                            </span>
+                        </div>
+                    </div>
                     {/* images */}
                     <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
                         {formik.values?.images?.map((each: any, index: number) => (
                             <div key={index} className='inline-flex justify-center'>
                                 <div className="relative">
                                     {each.url ? (
-                                        <img src={each?.url} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                        <img src={each?.url} onClick={() => {
+                                            handleSetImage(index);
+                                        }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
                                     ) : (
-                                        <img src={URL.createObjectURL(each)} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                        <img src={URL.createObjectURL(each)} onClick={() => {
+                                            handleSetImage(index);
+                                        }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
                                     )}
                                     <RxCross2 onClick={() => handleRemoveImg(index)}
                                         className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full"
