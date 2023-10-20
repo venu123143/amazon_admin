@@ -13,7 +13,6 @@ import ProductModal from "../../components/ProductModal";
 const AllProducts = () => {
   const [del, setDel] = useState<any>(false)
   const [id, setId] = useState("")
-  // const [edit, setEdit] = useState(false)
 
   const dispatch: AppDispatch = useDispatch()
   const { products, modal } = useSelector((state: RootState) => state.product)

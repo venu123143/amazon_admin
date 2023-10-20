@@ -11,6 +11,7 @@ import { SyncLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { RxCross2 } from 'react-icons/rx';
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { AppDispatch, RootState } from '../../Redux/Store';
 import CustomInput from '../../components/CustomInput'
@@ -111,12 +112,15 @@ const AddProduct = () => {
       dispatch(createProduct(formData));
       formik.resetForm();
       setTags([])
+      setImages([])
     },
   });
-  const handleRemoveImg = useCallback((id: number) => {
+
+  const handleRemoveImg = useCallback((id: number) => {    
     const imagesCopy = [...formik.values.images];
     imagesCopy.splice(id, 1);
     formik.setFieldValue("images", imagesCopy);
+    setImages(imagesCopy)
   }, [formik.values.images]);
 
 
@@ -151,6 +155,42 @@ const AddProduct = () => {
     setIsFullscreen(true);
     setCurrentImage(URL.createObjectURL(images[index]));
   };
+
+  const reorder = (list: any, startIndex: any, endIndex: any) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
+  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+    // styles to apply when dragging
+    background: isDragging ? 'lightgreen' : '',
+    ...draggableStyle,
+  });
+
+  const getListStyle = (isDraggingOver: any) => ({
+    // styles to apply when dragging over the droppable area
+    background: isDraggingOver ? 'lightblue' : '',
+    display: 'flex',
+    padding: 8,
+    overflow: 'auto',
+  });
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedItems = reorder(
+      images,
+      result.source.index,
+      result.destination.index
+    );
+    formik.setFieldValue("images", reorderedItems);
+    setImages(reorderedItems);
+  };
+
   return (
     <div>
       <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Product</h3>
@@ -267,7 +307,7 @@ const AddProduct = () => {
           <label htmlFor="AddImages" className="block text-sm font-medium text-gray-900">
             Add Images <span className="text-red-500 text-lg">*</span>
           </label>
-          <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
+          {/* <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
             {formik.values?.images?.map((each: any, index: number) => (
               <div key={index} className='inline-flex justify-center'>
                 <div className="relative">
@@ -281,7 +321,52 @@ const AddProduct = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
+
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="images">
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={getListStyle(snapshot.isDraggingOver)}
+                >
+                  <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
+                    {formik.values?.images?.map((each: any, index: number) => (
+                      <Draggable key={index} draggableId={each?.path} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style
+                            )}
+                          >
+                            <div key={index} className='inline-flex justify-center'>
+                              <div className="relative">
+                                <img src={URL.createObjectURL(each)} onClick={() => {
+                                  handleSetImage(index);
+                                }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                <RxCross2 onClick={() => handleRemoveImg(index)}
+                                  className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full"
+                                  size={35}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                      </Draggable>
+                    ))}
+                  </div>
+
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           <Dropzone onDrop={acceptedFiles => {
             toast.success("images added", {
               position: 'top-right'

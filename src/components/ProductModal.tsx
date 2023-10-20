@@ -4,6 +4,8 @@ import { toast } from "react-toastify"
 import { useFormik } from 'formik';
 import ReactQuill from 'react-quill';
 import Dropzone from 'react-dropzone'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
 import { array, number, object, string } from 'yup';
 import { AiOutlineCloudUpload, AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +32,7 @@ let userSchema = object({
 const ProductModal = ({ prod }: any) => {
     const [color, setColor] = useState<any>([])
     const [tags, setTags] = useState<any>([])
-    const [images, setImages] = useState<any>([])
+
 
     const dispatch: AppDispatch = useDispatch()
     const { isLoading, modal } = useSelector((state: RootState) => state.product)
@@ -62,11 +64,8 @@ const ProductModal = ({ prod }: any) => {
             formik.values.color = value
         if (tags.length !== 0)
             formik.values.tags = tags
-        if (images.length !== 0) {
-            // formik.values.images = images
-            formik.setFieldValue('images', images);
-        }
-    }, [color, tags, images])
+
+    }, [color, tags])
     type Image = {
         url: string;
         asset_id: string;
@@ -98,8 +97,9 @@ const ProductModal = ({ prod }: any) => {
             formData.append('tags', JSON.stringify(values.tags));
             for (let i = 0; i < values.images.length; i++) {
                 const image = values.images[i];
+
                 if ('url' in image) {
-                    formData.append('existingImg', JSON.stringify(prod?.images[i]));
+                    formData.append('existingImg', JSON.stringify(image));
                 }
                 else {
                     formData.append('images', values.images[i] as File);
@@ -111,9 +111,9 @@ const ProductModal = ({ prod }: any) => {
         },
 
     });
-    // console.log(prod.images);
 
     useEffect(() => {
+
         formik.setValues({
             title: prod?.title || '',
             description: prod?.description || '',
@@ -136,39 +136,41 @@ const ProductModal = ({ prod }: any) => {
         if (prod?.tags) {
             setTags(prod?.tags)
         }
+        if (prod?.images) {
+            formik.setFieldValue("images", prod?.images);
+        }
     }, [prod]);
+
 
     const handleRemoveImg = useCallback((id: number) => {
         const imagesCopy = [...formik.values.images];
         imagesCopy.splice(id, 1);
         formik.setFieldValue("images", imagesCopy);
+
     }, [formik.values.images]);
-
-
-
 
 
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [currentImage, setCurrentImage] = useState(images[0]);
+    const [currentImage, setCurrentImage] = useState<any>(null);
     const closeFullscreen = () => {
         setCurrentIndex(null);
         setIsFullscreen(false);
         setCurrentImage(null);
     };
     var nextImage = () => {
-        if (currentIndex! < images.length - 1) {
+        if (currentIndex! < formik.values.images.length - 1) {
             setCurrentIndex(currentIndex! + 1);
-            setCurrentImage(images[currentIndex! + 1]);
+            setCurrentImage(formik.values.images[currentIndex! + 1]);
         }
-        else if (currentIndex! >= images.length - 1) {
+        else if (currentIndex! >= formik.values.images.length - 1) {
             setIsFullscreen(false);
         }
     };
     var prevImage = () => {
         if (currentIndex! > 0) {
             setCurrentIndex(currentIndex! - 1);
-            setCurrentImage(images[currentIndex! - 1]);
+            setCurrentImage(formik.values.images[currentIndex! - 1]);
         } else if (currentIndex! <= 0) {
             setIsFullscreen(false);
         }
@@ -176,8 +178,37 @@ const ProductModal = ({ prod }: any) => {
     var handleSetImage = (index: number) => {
         setCurrentIndex(index);
         setIsFullscreen(true);
-        setCurrentImage(images[index]);
+        setCurrentImage(formik.values.images[index]);
     };
+    const reorder = (list: any, startIndex: any, endIndex: any) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+        // styles to apply when dragging
+        background: isDragging ? 'lightgreen' : '',
+        ...draggableStyle,
+    });
+
+    const getListStyle = (isDraggingOver: any) => ({
+        // styles to apply when dragging over the droppable area
+        background: isDraggingOver ? 'lightblue' : '',
+        display: 'flex',
+        padding: 8,
+        overflow: 'auto',
+    });
+
+    const onDragEnd = useCallback((result: any) => {
+        if (!result.destination) {
+            return;
+        }
+        const reorderedItems = reorder(formik.values.images, result.source.index, result.destination.index);
+        formik.setFieldValue("images", reorderedItems);
+    }, [formik.values.images]);
+
 
     return (
         <>
@@ -283,27 +314,9 @@ const ProductModal = ({ prod }: any) => {
                         ) : null}
                     </div>
 
-                    {/* big image */}
-                    <div className={` fixed -top-2 left-0 w-full h-full bg-black bg-opacity-80 z-50 ${isFullscreen ? "active" : "hidden"}`}>
-                        <div className="fullscreen-modal">
-                            <img
-                                src={currentImage}
-                                alt={`Image ${currentIndex! + 1}`}
-                                className="fullscreen-image"
-                            />
-                            <span className="close-button p-2 rounded-full bg-gray-300 text-black" onClick={closeFullscreen}>
-                                <RxCross2 />
-                            </span>
-                            <span className="prev-button p-2 rounded-full bg-gray-300 text-black" onClick={prevImage}>
-                                <AiOutlineLeft />
-                            </span>
-                            <span className="next-button p-2 rounded-full bg-gray-300 text-black" onClick={nextImage}>
-                                <AiOutlineRight />
-                            </span>
-                        </div>
-                    </div>
+
                     {/* images */}
-                    <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
+                    {/* <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
                         {formik.values?.images?.map((each: any, index: number) => (
                             <div key={index} className='inline-flex justify-center'>
                                 <div className="relative">
@@ -323,13 +336,64 @@ const ProductModal = ({ prod }: any) => {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="images">
+                            {(provided, snapshot) => (
+                                <div
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    style={getListStyle(snapshot.isDraggingOver)}
+                                >
+                                    <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
+                                        {formik.values?.images?.map((each: any, index: number) => (
+                                            <Draggable key={index} draggableId={each?.path ? each?.path : each.url} index={index}>
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        style={getItemStyle(
+                                                            snapshot.isDragging,
+                                                            provided.draggableProps.style
+                                                        )}
+                                                    >
+                                                        <div key={index} className='inline-flex justify-center'>
+                                                            <div className="relative">
+                                                                {each?.url ? (
+                                                                    <img src={each?.url} onClick={() => {
+                                                                        handleSetImage(index);
+                                                                    }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                                                ) : (
+                                                                    <img src={URL.createObjectURL(each)} onClick={() => {
+                                                                        handleSetImage(index);
+                                                                    }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
+                                                                )}
 
+                                                                <RxCross2 onClick={() => handleRemoveImg(index)}
+                                                                    className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full"
+                                                                    size={35}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                            </Draggable>
+                                        ))}
+                                    </div>
+
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                     <Dropzone onDrop={acceptedFiles => {
                         toast.success("images added", {
                             position: 'top-right'
                         })
-                        setImages([...prod?.images, ...acceptedFiles])
+                        // setImages([...prod?.images, ...acceptedFiles])
+                        formik.setFieldValue("images", [...prod?.images, ...acceptedFiles]);
 
                     }}>
                         {({ getRootProps, getInputProps }) => (
@@ -350,6 +414,27 @@ const ProductModal = ({ prod }: any) => {
                     </button>
                 </form>
             </div>
+            {/* big image */}
+            <div className={` overflow-y-scroll absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 w-full h-full z-30 transition-all ease-in ${isFullscreen ? "active" : "hidden"}`}>
+                <div className="fullscreen-modal">
+                    {
+                        currentImage ? (
+                            <img src={currentImage?.url ? currentImage?.url : URL.createObjectURL(currentImage)} alt="productimages" className={` ${isFullscreen === true ? "block" : "hidden"} max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1`} />
+
+                        ) : null
+                    }
+                    <span className="close-button p-2 rounded-full bg-gray-300 text-black" onClick={closeFullscreen}>
+                        <RxCross2 />
+                    </span>
+                    <span className="prev-button p-2 rounded-full bg-gray-300 text-black" onClick={prevImage}>
+                        <AiOutlineLeft />
+                    </span>
+                    <span className="next-button p-2 rounded-full bg-gray-300 text-black" onClick={nextImage}>
+                        <AiOutlineRight />
+                    </span>
+                </div>
+
+            </div>
             <div onClick={() => dispatch(openModal(false))} className={`${modal === true ? "block delay-75" : "hidden"} transition-all ease-in absolute top-0 left-0 z-0 bg-black opacity-50 w-full h-screen`}>
             </div>
             <div className={`${isLoading === true ? "block bg-black opacity-50 absolute top-0 left-0  z-20 w-full h-screen" : "hidden"}`}>
@@ -361,7 +446,8 @@ const ProductModal = ({ prod }: any) => {
                     data-testid="loader"
                 />
             </div>
-
+            <div onClick={() => dispatch(openModal(false))} className={`${isFullscreen === true ? "block delay-75" : "hidden"} transition-all ease-in absolute top-0 left-0 z-20 bg-black opacity-50 w-full h-full`}>
+            </div>
         </>
     )
 }
