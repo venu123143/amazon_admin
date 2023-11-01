@@ -39,7 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<SignUpPage />} />
-        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/reset/:id" element={<ResetPassword />} />
         <Route path="/otplogin" element={<LoginWithOtp />} />
         <Route path='/admin' element={<MainLayout />}>
           <Route index element={<Dashboard />} />

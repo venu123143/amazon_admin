@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 export const getAllOrders = createAsyncThunk('orderSlice/getAllOrders', async (_, thunkAPI) => {
     try {
         const orders = await OrderService.getOrders()
+        console.log(orders);
+        
         return orders
 
     } catch (error: any) {

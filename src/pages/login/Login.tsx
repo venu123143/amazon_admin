@@ -9,15 +9,20 @@ import { object, string } from 'yup';
 
 
 import CustomInput from "../../components/CustomInput"
-import { login } from "../../Redux/Reducers/auth/AuthSlice"
+import { forgotPassword, login } from "../../Redux/Reducers/auth/AuthSlice"
 import { AppDispatch, RootState } from "../../Redux/Store"
 
+let userSchema = object({
+  email: string().email('Email should be valid').required('Email is Required'),
+  password: string().required('Password is Required')
+
+});
 const LoginPage = () => {
   const dispatch: AppDispatch = useDispatch()
   const navigate = useNavigate()
   const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
   const [forgotpassword, setForgotPassword] = useState(false)
-
+  const [email, setEmail] = useState("")
 
   useEffect(() => {
     if (user !== null) {
@@ -26,12 +31,12 @@ const LoginPage = () => {
   }, [message, user, isLoading, isError, isSuccess])
 
 
-  let userSchema = object({
-    email: string().email('Email should be valid').required('Email is Required'),
-    password: string().required('Password is Required')
 
-  });
-
+  const handleSubmit = () => {
+    dispatch(forgotPassword(email))
+    setEmail("")
+    if (isSuccess === true) navigate('/')
+  }
   const override: CSSProperties = {
     display: "block",
     margin: "0 auto",
@@ -50,7 +55,7 @@ const LoginPage = () => {
     },
   });
   return (
-    <section className="bg-[#FFFFF7] w-full">
+    <section className="bg-skin-background text-skin-base w-full">
       <Link to="/" className="absolute top-2 left-2 text-[#777777] flex items-center hover:text-black">
         <BsArrowLeftShort size={28} className="inline" />
         <button>back to home</button>
@@ -69,18 +74,21 @@ const LoginPage = () => {
               {forgotpassword === true ? (
                 <>
                   <div>
-                    <h1 className="text-lg font-medium leading-tight text-center tracking-tight text-gray-900 md:text-xl dark:text-white">
+                    <h1 className="text-lg font-medium leading-tight text-center tracking-tight text-skin-base md:text-xl dark:text-white">
                       Reset your password
                     </h1>
                     <p className="font-light text-center text-[#777777] mb-2">we will send you an email to reset your password</p>
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Your email</label>
-                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    <input
+                      onChange={(e) => setEmail(e.target.value)} value={email}
+                      type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Enter your email" required />
+
                     <div className="text-center">
-                      <button className="button my-[10px] text-white text-[0.91rem] px-[25px] py-[6px] rounded-[25px]">
-                        Submit
+                      <button onClick={handleSubmit} className="bg-skin-light text-skin-background hover:text-skin-backgroundLight hover:bg-skin-main shadow-lg my-[10px] text-[0.91rem] px-[25px] py-[6px] rounded-[25px]">
+                        submit
                       </button> <br />
-                      <button onClick={() => setForgotPassword(false)} className="hover:underline text-black my-[10px] text-[0.91rem] px-[25px] py-[6px] rounded-[25px]">
+                      <button onClick={() => setForgotPassword(false)} className="hover:underline text-black dark:text-white  my-[10px] text-[0.91rem] px-[25px] py-[6px] rounded-[25px]">
                         Cancel
                       </button>
                     </div>
@@ -116,9 +124,9 @@ const LoginPage = () => {
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-start">
-                        <div onClick={() => setForgotPassword(true)} className="text-sm font-medium hover:underline ">Forgot password?</div>
+                        <div onClick={() => setForgotPassword(true)} className="text-sm dark:text-white font-medium hover:underline ">Forgot password?</div>
                       </div>
-                      <Link to="/otplogin" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
+                      <Link to="/otplogin" className="text-sm font-medium dark:text-white hover:underline dark:text-primary-500">
                         Login with OTP
                       </Link>
                     </div>

@@ -14,6 +14,8 @@ const Orders = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch()
   const { orders } = useSelector((state: RootState) => state.ord)
+  console.log(orders);
+
   const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
 
   const handleDelete = (id: string) => {
@@ -26,7 +28,7 @@ const Orders = () => {
       navigate('/')
     }
   }, [message, user, isError, isSuccess])
-  
+
   useEffect(() => {
     dispatch(getAllOrders())
   }, [del])
@@ -45,10 +47,10 @@ const Orders = () => {
   for (let i = 0; i < orders.length; i++) {
     tableData.push({
       key: i,
-      order_id: orders[i]?.paymentIntent?.order_id,
-      order_by: orders[i]?.orderBy?.firstname,
-      payment_method: orders[i]?.paymentMethod,
-      order_amount: orders[i]?.paymentIntent.amount,
+      order_id: orders[i]?.paymentInfo?.razorPayOrderId,
+      order_by: orders[i]?.shippingInfo?.name,
+      payment_method: orders[i]?.paymentInfo?.razorPayPaymentId,
+      order_amount: orders[i]?.totalPrice,
       order_status: orders[i]?.orderStatus,
       createdAt: new Date(orders[i].createdAt).toLocaleDateString(),
       action: (
@@ -75,7 +77,7 @@ const Orders = () => {
     CreditCard_NO_Cost_Emi: "bg-[#EDF418]"
   }
   const orderStatusCodes: any = {
-    Not_Processed: "bg-[#A52A2A] text-white shadow-[#A52A2A]",
+    Ordered: "bg-[#A52A2A] text-white shadow-[#A52A2A]",
     Processing: "bg-[#18F430] shadow-[#0B7C1A]",
     Dispatched: "bg-[#F3F71E] border-black text-black shadow-blue-600",
     Cancelled: "bg-red-600 text-white shadow-red-600",
@@ -108,9 +110,9 @@ const Orders = () => {
     {
       title: 'payment_method',
       dataIndex: 'payment_method',
-      sorter: (a, b) => a.payment_method.length - b.payment_method.length,
+      sorter: (a, b) => a.payment_method?.length - b.payment_method.length,
       render: (text: string) => {
-        const cleanedText = text.replaceAll(/\s/g, '');
+        const cleanedText = text?.replaceAll(/\s/g, '');
         let value = null
         for (const key in PaymentColorCodes) {
           if (key.replaceAll('_', '') == cleanedText) {

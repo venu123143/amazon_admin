@@ -42,16 +42,32 @@ export const login = createAsyncThunk('authSlice/admin-login', async (user: User
 })
 export const logout = createAsyncThunk('authSlice/admin-logout', async (_, thunkAPI) => {
     try {
-
         const res = await authService.logout()
+        return res
 
+    } catch (error: any) {
+        localStorage.removeItem("user")
+        return thunkAPI.rejectWithValue(error?.response?.data)
+    }
+})
+
+export const forgotPassword = createAsyncThunk('authSlice/forgotPassword', async (email: string, thunkAPI) => {
+    try {
+        const res = await authService.forgot(email)
+        return res
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue(error?.response?.data)
+    }
+})
+export const resetPassword = createAsyncThunk('authSlice/resetPassword', async (data: { password: string, token: string }, thunkAPI) => {
+    try {
+        const res = await authService.reset(data?.token, data?.password)
         return res
 
     } catch (error: any) {
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
-
 
 const authSlice = createSlice({
     name: 'authSlice',
@@ -93,6 +109,44 @@ const authSlice = createSlice({
                 position: 'top-right'
             })
         }).addCase(logout.rejected, (state, action: PayloadAction<any>) => {
+            state.isError = true
+            state.isLoading = false
+            state.message = action.payload?.message
+            toast.error(state.message, {
+                position: 'top-right'
+            })
+        })
+
+        builder.addCase(forgotPassword.pending, (state) => {
+            state.isLoading = true
+            state.isSuccess = false
+            state.isError = false
+        }).addCase(forgotPassword.fulfilled, (state) => {
+            state.isLoading = false
+            state.isSuccess = true
+            toast.success("Sucessfully sent An Email", {
+                position: 'top-right'
+            })
+        }).addCase(forgotPassword.rejected, (state, action: PayloadAction<any>) => {
+            state.isError = true
+            state.isLoading = false
+            state.message = action.payload?.message
+            toast.error(state.message, {
+                position: 'top-right'
+            })
+        })
+
+        builder.addCase(resetPassword.pending, (state) => {
+            state.isLoading = true
+            state.isSuccess = false
+            state.isError = false
+        }).addCase(resetPassword.fulfilled, (state) => {
+            state.isLoading = false
+            state.isSuccess = true
+            toast.success("Password reset successful", {
+                position: 'top-right'
+            })
+        }).addCase(resetPassword.rejected, (state, action: PayloadAction<any>) => {
             state.isError = true
             state.isLoading = false
             state.message = action.payload?.message

@@ -57,7 +57,7 @@ const Dashboard = () => {
   ]
 
   const totalOrderAmount = orders?.reduce((total, order) => {
-    return total + order.paymentIntent.amount;
+    return total + order?.totalPrice
   }, 0);
 
   // Calculate the average order value

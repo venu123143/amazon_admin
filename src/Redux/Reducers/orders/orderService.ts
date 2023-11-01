@@ -2,7 +2,7 @@ import axios from "axios";
 import { base_url } from "../../../utils/base_url";
 
 const getOrders = async () => {
-    const res = await axios.get(`${base_url}/users/orders`, { withCredentials: true })
+    const res = await axios.get(`${base_url}/users/allorders`, { withCredentials: true })
     return res.data
 }
 const deleteOrder = async (id: string) => {

@@ -65,7 +65,6 @@ const MainLayout: React.FC = () => {
                     onClick={({ key }) => {
                         if (key === "signout") {
                             console.log("log signout");
-
                         } else {
                             navigagte(key)
                         }
