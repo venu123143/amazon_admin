@@ -86,7 +86,6 @@ const pCategorySlice = createSlice({
             state.isLoading = false
             state.isSuccess = true
             state.isError = false
-            state.categories = action.payload
             toast.success('sucessfully created Product Category', {
                 position: 'top-right'
             })

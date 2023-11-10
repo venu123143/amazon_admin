@@ -131,7 +131,7 @@ const Orders = () => {
       dataIndex: 'order_status',
       sorter: (a, b) => a.order_status.length - b.order_status.length,
       render: (text: string) => {
-        const cleanedText = text.replaceAll(/\s/g, '');
+        const cleanedText = text?.replaceAll(/\s/g, '');
         let value = null
         for (const key in orderStatusCodes) {
           if (key.replaceAll('_', '') == cleanedText) {

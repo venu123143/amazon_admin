@@ -232,7 +232,7 @@ const MainLayout: React.FC = () => {
                                     <BsSearch />
                                 </div>
                                 <input type="search" id="default-search" className="block w-[300px] p-2 pl-10 text-sm text-gray-900 border border-gray-300 outline-none focus:shadow-md rounded-lg bg-gray-200 focus:bg-white " placeholder="Search here" required />
-                                <button className="bg-white absolute top-1.5 right-2 hover:bg-blue-600 text-blue-700 font-semibold hover:text-white px-4 py-3 border border-blue-500 hover:border-transparent rounded">
+                                <button className="bg-white absolute px-4 py-3 h-fit top-1.5 right-2 hover:bg-blue-600 text-blue-700 font-semibold hover:text-whiteborder border-blue-500 hover:border-transparent rounded">
                                     Submit
                                 </button>
                             </div>
