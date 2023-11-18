@@ -82,7 +82,7 @@ const pCategorySlice = createSlice({
         })
         builder.addCase(createCategory.pending, (state) => {
             state.isLoading = true
-        }).addCase(createCategory.fulfilled, (state, action: PayloadAction<any>) => {
+        }).addCase(createCategory.fulfilled, (state) => {
             state.isLoading = false
             state.isSuccess = true
             state.isError = false
