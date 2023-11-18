@@ -189,7 +189,7 @@ const MainLayout: React.FC = () => {
                         },
                         {
                             key: 'create-coupon',
-                            icon: <IoMdCreate  size={20} className="" />,
+                            icon: <IoMdCreate size={20} className="" />,
                             label: 'Create Coupon',
                             className: `${pathName == "/admin/create-coupon" ? "ant-menu-item-selected" : null}`
 
@@ -227,12 +227,12 @@ const MainLayout: React.FC = () => {
                         />
 
                         <form>
-                            <div className="relative">
+                            <div className="relative w-[300px] h-full">
                                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <BsSearch />
                                 </div>
-                                <input type="search" id="default-search" className="block w-[300px] p-2 pl-10 text-sm text-gray-900 border border-gray-300 outline-none focus:shadow-md rounded-lg bg-gray-200 focus:bg-white " placeholder="Search here" required />
-                                <button className="bg-white absolute px-4 py-3 h-fit top-1.5 right-2 hover:bg-blue-600 text-blue-700 font-semibold hover:text-whiteborder border-blue-500 hover:border-transparent rounded">
+                                <input type="search" id="default-search" className="block w-full h-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 outline-none focus:shadow-md rounded-lg bg-gray-200 focus:bg-white " placeholder="Search here" required />
+                                <button type='submit' className="bg-white absolute right-2 top-1.5  px-4 py-3    hover:bg-blue-600 text-blue-700 hover:text-white font-semibold hover:text-whiteborder border-blue-500 hover:border-transparent rounded">
                                     Submit
                                 </button>
                             </div>

@@ -141,11 +141,9 @@ const AllProducts = () => {
       <div>
         <Table
           columns={columns}
-          dataSource={tableData}
-        />
+          dataSource={tableData} />
         <DeleteModal openModal={setDel} modal={del} onClick={() => handleDelete(id)} />
         <ProductModal prod={id} />
-
       </div>
     </div>
   )

@@ -77,7 +77,7 @@ const initialState: ProductState = {
     isLoading: false,
     isSuccess: false,
     message: "",
-    modal: false
+    modal: false,
 }
 
 const productSlice = createSlice({
@@ -86,7 +86,8 @@ const productSlice = createSlice({
     reducers: {
         openModal: (state, action) => {
             state.modal = action.payload
-        }
+        },
+      
     },
     extraReducers: (builder) => {
         builder.addCase(getAllProducts.pending, (state) => {

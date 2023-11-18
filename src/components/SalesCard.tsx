@@ -4,8 +4,7 @@ import { RxArrowTopRight } from "react-icons/rx"
 import { GoArrowDownRight } from "react-icons/go"
 
 const SalesCard = ({ title, value }: any) => {
-    const [sales, setSales] = useState(6);
-    console.log(setSales);
+    const sales = 51;
 
     const [dropdown, setDropDown] = useState(false)
 

@@ -10,9 +10,14 @@ const deleteOrder = async (id: string) => {
     return res.data
 }
 
+const updateOrder = async (id: string, Status: string, index: number) => {
+    const res = await axios.put(`${base_url}/users/updateorder/${id}`, { Status, index }, { withCredentials: true })
+    return res.data
+}
 const OrderService = {
     getOrders,
-    deleteOrder
+    deleteOrder,
+    updateOrder,
 }
 
 export default OrderService

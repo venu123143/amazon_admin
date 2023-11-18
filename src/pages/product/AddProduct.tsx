@@ -116,7 +116,7 @@ const AddProduct = () => {
     },
   });
 
-  const handleRemoveImg = useCallback((id: number) => {    
+  const handleRemoveImg = useCallback((id: number) => {
     const imagesCopy = [...formik.values.images];
     imagesCopy.splice(id, 1);
     formik.setFieldValue("images", imagesCopy);
@@ -399,9 +399,7 @@ const AddProduct = () => {
           loading={isLoading}
           cssOverride={override}
           aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-
+          data-testid="loader" />
       </div>
     </div>
   )
