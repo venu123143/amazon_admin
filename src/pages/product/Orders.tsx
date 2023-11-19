@@ -7,14 +7,9 @@ import { deleteOrder, getAllOrders, openModal } from '../../Redux/Reducers/order
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import DeleteModal from '../../components/DeleteModal';
-import { useFormik } from 'formik';
-import { object, string } from "yup";
 import OrderModal from '../../components/OrderModel';
 
 
-const orderStatusSchema = object().shape({
-  orderStatus: string().required('Please select a status'),
-});
 const Orders = () => {
   const [del, setDel] = useState<any>(false)
   const [status, setStatus] = useState<any>("")
@@ -82,11 +77,11 @@ const Orders = () => {
     })
   }
   const PaymentColorCodes: any = {
-    Cash_on_Delivery: "bg-[#A52A2A] text-white",
-    UPI: "bg-[#18F430]",
+    paylater: "bg-[#A52A2A] text-white",
+    upi: "bg-[#18F430]",
     GiftCard: "bg-[#F73812] text-white",
-    Debit_Card: "bg-[#0B8018] text-white",
-    Credit_Card_EMI: "bg-[#1C2DF6] text-white",
+    card: "bg-[#0B8018] text-white",
+    netbanking: "bg-[#1C2DF6] text-white",
     CreditCard_NO_Cost_Emi: "bg-[#EDF418]"
   }
 
@@ -127,25 +122,25 @@ const Orders = () => {
     {
       title: 'paidWith',
       dataIndex: 'paidWith',
-      // sorter: (a, b) => a.order_status.length - b.order_status.length,
+      sorter: (a, b) => a.paidWith.length - b.paidWith.length,
       render: (text: string) => {
         const cleanedText = text?.replaceAll(/\s/g, '');
         let value = null
-        for (const key in orderStatusCodes) {
+        for (const key in PaymentColorCodes) {
           if (key.replaceAll('_', '') == cleanedText) {
-            value = orderStatusCodes[key]
+            value = PaymentColorCodes[key]
             break;
           }
         }
-
         return (
-          <span className={`${value} px-2 py-1 select-none flex flex-nowrap cursor-pointer justify-center border rounded-md shadow-md font-Rubik font-[450]`}>{text}</span>
+          <span className={`${value} px-2 py-1 border-black select-none flex flex-nowrap cursor-no-drop justify-center border rounded-md shadow-md font-Rubik font-[450]`}>{text}</span>
         )
       }
     },
     {
       title: 'orderStatus',
       dataIndex: 'orderStatus',
+      sorter: (a, b) => a.order_by.length - b.order_by.length,
       render: (text: string) => {
         const cleanedText = text?.replaceAll(/\s/g, '');
         let value = null
@@ -181,17 +176,7 @@ const Orders = () => {
       dataIndex: 'action',
     },
   ];
-  const formik = useFormik({
-    initialValues: {
-      orderStatus: ''
-    },
-    validationSchema: orderStatusSchema,
-    onSubmit: data => {
-      // dispatch(editColor({ id, data }))
-      formik.resetForm()
 
-    }
-  })
 
   return (
     <div className="my-4">
