@@ -82,7 +82,7 @@ const Orders = () => {
     GiftCard: "bg-[#F73812] text-white",
     card: "bg-[#0B8018] text-white",
     netbanking: "bg-[#1C2DF6] text-white",
-    CreditCard_NO_Cost_Emi: "bg-[#EDF418]"
+    wallet: "bg-[#EDF418]"
   }
 
   // bg-red-600 text-white shadow-red-600
