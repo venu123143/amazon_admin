@@ -23,6 +23,7 @@ export const deleteOrder = createAsyncThunk('orderSlice/deleteOrder', async (id:
 })
 export const updateOrder = createAsyncThunk('orderSlice/updateOrder', async (data: { id: string, Status: string, index: number }, thunkAPI) => {
     try {
+        console.log(data);
         const orders = await OrderService.updateOrder(data.id, data.Status, data.index)
         return orders
 

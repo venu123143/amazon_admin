@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { AppDispatch } from '../Redux/Store';
+import { AppDispatch, RootState } from '../Redux/Store';
 import { useDispatch } from 'react-redux';
 import { handleStatus } from '../Redux/Reducers/orders/orderSlice';
+import { useSelector } from 'react-redux';
 const StatusTypes = ["Ordered", "Processing", "Dispatched", "Delivered", "Returned", "Cancelled"]
 
 const StatusInput = ({ prop, index }: any) => {
+
+    const { modal } = useSelector((state: RootState) => state.ord)
     const dispatch: AppDispatch = useDispatch()
     const [openStatus, setOpenStatus] = useState<{ status: boolean, value: string }>({
         status: false,
         value: prop?.orderStatus
     });
-
     useEffect(() => {
+        setOpenStatus({ status: false, value: prop?.orderStatus })
+    }, [modal])
+    useEffect(() => {
+        // console.log("calling", "2");
         dispatch(handleStatus({ status: openStatus.value, index }))
-    }, [openStatus.value])
+    }, [openStatus.value, modal])
 
     return (
         <div className="relative">
@@ -33,9 +39,7 @@ const StatusInput = ({ prop, index }: any) => {
                     </div>
                 )
             }
-
         </div >
-
     )
 }
 

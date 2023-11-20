@@ -12,6 +12,8 @@ const deleteOrder = async (id: string) => {
 
 const updateOrder = async (id: string, Status: string, index: number) => {
     const res = await axios.put(`${base_url}/users/updateorder/${id}`, { Status, index }, { withCredentials: true })
+    console.log(res.data);
+
     return res.data
 }
 const OrderService = {

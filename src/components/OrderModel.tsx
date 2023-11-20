@@ -7,7 +7,10 @@ import { openModal, updateOrder } from "../Redux/Reducers/orders/orderSlice"
 import StatusInput from "./StatusInput"
 
 const OrderModal = ({ status, title, id }: any) => {
+  // console.log(status, id);
+
   const { Status, index, modal } = useSelector((state: RootState) => state.ord)
+  console.log(index, id, Status);
 
   const dispatch: AppDispatch = useDispatch()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
