@@ -26,7 +26,7 @@ const Customers = () => {
 
   interface DataType {
     key: React.Key;
-    CreatedAt?: string
+    CreatedAt: string
     Name: string;
     Email: string;
     Mobile: string;
@@ -93,10 +93,10 @@ const Customers = () => {
     },
     {
       title: 'CreatedAt',
-      dataIndex: 'createdAt',
+      dataIndex: 'CreatedAt',
       sorter: (a, b) => {
-        const nameA = a.createdAt
-        const nameB = b.createdAt
+        const nameA = a.CreatedAt
+        const nameB = b.CreatedAt
 
         if (nameA < nameB) {
           return -1;

@@ -21,8 +21,11 @@ const CategoryList = () => {
   const { message, user, isError, isLoading, isSuccess } = useSelector((state: RootState) => state.auth)
 
   const handleDelete = (id: string) => {
-    dispatch(deleteCategory(id))
-    setDel(false)
+    dispatch(deleteCategory(id)).then(() => {
+      setDel(false)
+      dispatch(getCategories())
+
+    })
   }
 
   useEffect(() => {
@@ -33,7 +36,8 @@ const CategoryList = () => {
 
   useEffect(() => {
     dispatch(getCategories())
-  }, [del])
+  }, [])
+  
   interface ProductDataType {
     key: React.Key;
     CreatedAt: string;

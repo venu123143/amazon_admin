@@ -1,4 +1,4 @@
-
+import React, { Suspense } from 'react';
 import './css/App.css'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,57 +12,61 @@ import MainLayout from './pages/Dashboard/MainLayout'
 import Dashboard from './pages/Dashboard/Dashboard'
 import LoginWithOtp from './pages/login/LoginWithOtp';
 import SignUpPage from './pages/login/Register';
-import Blogs from './pages/blogs/Blogs';
-import AddBlog from './pages/blogs/AddBlog';
-import AddProduct from './pages/product/AddProduct';
-import AllProducts from './pages/product/AllProducts';
-import BlogCatList from './pages/blogs/BlogCatList';
-import ColorList from './pages/Colors/ColorList';
-import Customers from './pages/product/Customers';
-import Orders from './pages/product/Orders';
-import CategoryList from './pages/product/CategoryList';
-import BrandList from './pages/Brands/BrandList';
-import AddBlogCat from './pages/blogs/AddBlogCat';
-import AddColor from './pages/Colors/AddColor';
-import AddProdCategory from './pages/product/AddCategory';
-import AddBrand from './pages/Brands/AddBrand';
-import Enquries from './pages/Dashboard/Enquries';
-import Errorpage from './components/ErrorPage';
-import AddCoupon from './pages/coupons/AddCoupon';
-import CouponList from './pages/coupons/CouponList';
+import LoadingComp from './helpers/LoadingComp';
+
+const Blogs = React.lazy(() => import('./pages/blogs/Blogs'));
+const AddBlog = React.lazy(() => import('./pages/blogs/AddBlog'));
+const AddProduct = React.lazy(() => import('./pages/product/AddProduct'));
+const AllProducts = React.lazy(() => import('./pages/product/AllProducts'));
+const BlogCatList = React.lazy(() => import('./pages/blogs/BlogCatList'));
+const ColorList = React.lazy(() => import('./pages/Colors/ColorList'));
+const Customers = React.lazy(() => import('./pages/product/Customers'));
+const Orders = React.lazy(() => import('./pages/product/Orders'));
+const CategoryList = React.lazy(() => import('./pages/product/CategoryList'));
+const BrandList = React.lazy(() => import('./pages/Brands/BrandList'));
+const AddBlogCat = React.lazy(() => import('./pages/blogs/AddBlogCat'));
+const AddColor = React.lazy(() => import('./pages/Colors/AddColor'));
+const AddProdCategory = React.lazy(() => import('./pages/product/AddCategory'));
+const AddBrand = React.lazy(() => import('./pages/Brands/AddBrand'));
+const Enquries = React.lazy(() => import('./pages/Dashboard/Enquries'));
+const Errorpage = React.lazy(() => import('./components/ErrorPage'));
+const AddCoupon = React.lazy(() => import('./pages/coupons/AddCoupon'));
+const CouponList = React.lazy(() => import('./pages/coupons/CouponList'));
 
 function App() {
   return (
     <>
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false}
         pauseOnFocusLoss draggable pauseOnHover theme="light" />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<SignUpPage />} />
-        <Route path="/reset/:id" element={<ResetPassword />} />
-        <Route path="/otplogin" element={<LoginWithOtp />} />
-        <Route path='/admin' element={<MainLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="/admin/blog-list" element={<Blogs />} />
-          <Route path="/admin/blog-category-list" element={<BlogCatList />} /> 
-          <Route path="/admin/orders" element={<Orders />} /> 
-          <Route path="/admin/customers" element={<Customers />} /> 
-          <Route path="/admin/colorlist" element={<ColorList />} /> 
-          <Route path="/admin/categorylist" element={<CategoryList />} /> 
-          <Route path="/admin/brandlist" element={<BrandList />} /> 
-          <Route path="/admin/productlist" element={<AllProducts />} />
-          <Route path="/admin/blog" element={<AddBlog />} />  
-          <Route path="/admin/blog-category" element={<AddBlogCat />} />  
-          <Route path="/admin/product" element={<AddProduct />} />  
-          <Route path="/admin/color" element={<AddColor />} />
-          <Route path="/admin/category" element={<AddProdCategory />} /> 
-          <Route path="/admin/brand" element={<AddBrand />} />
-          <Route path="/admin/enquiries" element={<Enquries />} />
-          <Route path="/admin/coupons" element={<CouponList />} />
-          <Route path="/admin/create-coupon" element={<AddCoupon />} />
-        </Route>
-        <Route path="*" element={<Errorpage />} />
-      </Routes>
+      <Suspense fallback={<LoadingComp />}>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<SignUpPage />} />
+          <Route path="/reset/:id" element={<ResetPassword />} />
+          <Route path="/otplogin" element={<LoginWithOtp />} />
+          <Route path='/admin' element={<MainLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="/admin/blog-list" element={<Blogs />} />
+            <Route path="/admin/blog-category-list" element={<BlogCatList />} />
+            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/customers" element={<Customers />} />
+            <Route path="/admin/colorlist" element={<ColorList />} />
+            <Route path="/admin/categorylist" element={<CategoryList />} />
+            <Route path="/admin/brandlist" element={<BrandList />} />
+            <Route path="/admin/productlist" element={<AllProducts />} />
+            <Route path="/admin/blog" element={<AddBlog />} />
+            <Route path="/admin/blog-category" element={<AddBlogCat />} />
+            <Route path="/admin/product" element={<AddProduct />} />
+            <Route path="/admin/color" element={<AddColor />} />
+            <Route path="/admin/category" element={<AddProdCategory />} />
+            <Route path="/admin/brand" element={<AddBrand />} />
+            <Route path="/admin/enquiries" element={<Enquries />} />
+            <Route path="/admin/coupons" element={<CouponList />} />
+            <Route path="/admin/create-coupon" element={<AddCoupon />} />
+          </Route>
+          <Route path="*" element={<Errorpage />} />
+        </Routes>
+      </Suspense>
     </>
   )
 }

@@ -27,7 +27,9 @@ export const getAllProducts = createAsyncThunk('productSlice/getAllProducts', as
         const users = await productService.getProducts()
         return users
     } catch (error: any) {
-        console.log(error);
+        if (error?.response?.data.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
@@ -37,7 +39,9 @@ export const createProduct = createAsyncThunk('productSlice/createProduct', asyn
         const prod = await productService.create(data)
         return prod
     } catch (error: any) {
-        console.log(error);
+        if (error?.response?.data.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
@@ -47,7 +51,9 @@ export const deleteProduct = createAsyncThunk('productSlice/deleteProduct', asyn
         const prod = await productService.deleteProd(id)
         return prod
     } catch (error: any) {
-        console.log(error);
+        if (error?.response?.data.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
@@ -57,7 +63,9 @@ export const editProduct = createAsyncThunk('productSlice/editProduct', async (d
         const prod = await productService.editPrpd(data.id, data.data)
         return prod
     } catch (error: any) {
-        console.log(error);
+        if (error?.response?.data.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
@@ -87,7 +95,7 @@ const productSlice = createSlice({
         openModal: (state, action) => {
             state.modal = action.payload
         },
-      
+
     },
     extraReducers: (builder) => {
         builder.addCase(getAllProducts.pending, (state) => {

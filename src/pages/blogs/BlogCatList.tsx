@@ -27,8 +27,10 @@ const BlogCatList = () => {
   const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
 
   const handleDelete = (id: string) => {
-    dispatch(deleteBlogCategory(id))
-    setDel(false)
+    dispatch(deleteBlogCategory(id)).then(() => {
+      setDel(false)
+      dispatch(getBlogCategories())
+    })
   }
 
   const formik = useFormik({
@@ -50,7 +52,7 @@ const BlogCatList = () => {
 
   useEffect(() => {
     dispatch(getBlogCategories())
-  }, [del, edit])
+  }, [edit])
 
   interface BrandDataType {
     key: React.Key;

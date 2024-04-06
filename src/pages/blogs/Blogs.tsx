@@ -19,8 +19,11 @@ const Blogs = () => {
   const [id, setId] = useState<any>("")
 
   const handleDelete = (id: string) => {
-    dispatch(deleteBlog(id))
-    setDel(false)
+    dispatch(deleteBlog(id)).then(() => {
+      setDel(false)
+      dispatch(getAllBlogs())
+
+    })
   }
 
   useEffect(() => {
@@ -31,7 +34,7 @@ const Blogs = () => {
 
   useEffect(() => {
     dispatch(getAllBlogs())
-  }, [del, modal])
+  }, [modal])
 
   interface BlogsDataType {
     key: number;
@@ -50,7 +53,7 @@ const Blogs = () => {
       title: blogs[i].title,
       category: blogs[i].category?.title,
       views: blogs[i].numViews,
-      auther: blogs[i].auther?.firstname + " " + blogs[i].auther?.lastname,
+      auther: blogs[i].auther?.firstname ? blogs[i].auther?.firstname + " " + blogs[i].auther?.lastname : 'user',
       createdAt: new Date(blogs[i].createdAt).toLocaleDateString(),
       action: (
         <div className="flex space-x-2">
