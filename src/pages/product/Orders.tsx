@@ -16,7 +16,7 @@ const Orders = () => {
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch()
-  const { orders, modal } = useSelector((state: RootState) => state.ord)
+  const { orders } = useSelector((state: RootState) => state.ord)
 
   const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
 
