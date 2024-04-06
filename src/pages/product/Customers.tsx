@@ -26,7 +26,7 @@ const Customers = () => {
 
   interface DataType {
     key: React.Key;
-    CreatedAt?: string
+    CreatedAt: string
     Name: string;
     Email: string;
     Mobile: string;
@@ -51,6 +51,7 @@ const Customers = () => {
       title: 'SNO.',
       dataIndex: 'key',
       render: (text: string) => <a>{text}</a>,
+      sorter: (a, b) => parseInt(a.key as string) - parseInt(b.key as string)
     },
     {
       title: 'Name',
@@ -93,6 +94,18 @@ const Customers = () => {
     {
       title: 'CreatedAt',
       dataIndex: 'CreatedAt',
+      sorter: (a, b) => {
+        const nameA = a.CreatedAt
+        const nameB = b.CreatedAt
+
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      }
     },
     {
       title: 'Is Blocked',

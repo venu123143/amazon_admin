@@ -6,8 +6,10 @@ export const getAllOrders = createAsyncThunk('orderSlice/getAllOrders', async (_
     try {
         const orders = await OrderService.getOrders()
         return orders
-    } catch (error: any) {
-        console.log(error);
+    } catch (error: any) {        
+        if (error?.response?.data?.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
@@ -17,7 +19,9 @@ export const deleteOrder = createAsyncThunk('orderSlice/deleteOrder', async (id:
         return orders
 
     } catch (error: any) {
-        console.log(error);
+        if (error?.response?.data?.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })
@@ -28,7 +32,9 @@ export const updateOrder = createAsyncThunk('orderSlice/updateOrder', async (dat
         return orders
 
     } catch (error: any) {
-        console.log(error);
+        if (error?.response?.data?.title === 'UNAUTHORIZED_ERROR') {
+            localStorage.removeItem("user")
+        }
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
 })

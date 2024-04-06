@@ -233,11 +233,11 @@ const MainLayout: React.FC = () => {
                             <input type="search" id="default-search" placeholder="Search here"
                                 className="block w-full h-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 outline-none focus:shadow-md rounded-lg bg-gray-200 focus:bg-white"
                                 required />
-                            <button
+                            {/* <button
                                 type='submit'
                                 className="bg-white absolute right-2 top-1.5 px-4 py-3 hover:bg-blue-600 text-blue-700 font-semibold hover:text-white border border-blue-500 hover:border-transparent rounded">
                                 Submit
-                            </button>
+                            </button> */}
                         </form>
                     </div>
                     <div className=' mr-5  flex items-center justify-between gap-5'>

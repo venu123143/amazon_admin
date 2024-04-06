@@ -1,10 +1,11 @@
 import React from "react"
 import { RxCross2 } from "react-icons/rx"
 import { BiErrorAlt } from "react-icons/bi"
+
 const DeleteModal = ({ openModal, modal, onClick }: any) => {
     return (
         <div>
-            <div id="popup-modal" tabIndex={-1} className={`absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2  z-50 transition-all ease-in ${modal === true ? "scale-100 duration-200" : "scale-0 duration-200"}  p-4 overflow-x-hidden overflow-y-auto  `}>
+            <div id="popup-modal" tabIndex={-1} className={`shadow-white  rounded-md absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2  z-50 transition-all ease-in ${modal === true ? "scale-100 duration-200" : "scale-0 duration-200"}  overflow-x-hidden overflow-y-auto  `}>
                 <div className=" w-full max-w-md max-h-full">
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <button type="button" onClick={() => openModal(false)} className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">

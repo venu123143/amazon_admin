@@ -57,24 +57,31 @@ const Dashboard = () => {
   ]
 
   const totalOrderAmount = orders?.reduce((total, order) => {
-    return total + order?.totalPrice
+    return total + (order?.totalPrice || 0); // Adding 0 if totalPrice is null or undefined
   }, 0);
 
   // Calculate the average order value
-  const averageOrderValue = totalOrderAmount / orders.length;
+  const averageOrderValue = orders.length > 0 ? totalOrderAmount / orders.length : 0;
+
+  // Format the total order amount and average order value to two decimal places
+  const formattedTotalOrderAmount = Number.isNaN(totalOrderAmount) ? 0 : totalOrderAmount.toFixed(2);
+  const formattedAverageOrderValue = Number.isNaN(averageOrderValue) ? 0 : averageOrderValue.toFixed(2);
 
   const cards = [
     {
-      title: 'Total Sold Amount ',
-      value: `$ ${totalOrderAmount}`,
+      title: 'Total Sold Amount',
+      value: `$ ${formattedTotalOrderAmount}`,
+      onClick: () => { }
     },
     {
       title: 'Average order value',
-      value: `$ ${averageOrderValue}`,
+      value: `$ ${formattedAverageOrderValue}`,
+      onClick: () => { }
     },
     {
       title: 'Total orders',
       value: orders.length,
+      onClick: () => navigate('/admin/orders')
     },
   ]
 
@@ -85,7 +92,7 @@ const Dashboard = () => {
       <div className="block 1100px:flex justify-between items-center gap-3 space-y-1 w-full">
         {cards.map((each, index) => (
           <div className="lg:w-full w-auto" key={index}>
-            <SalesCard title={each.title} value={each.value} />
+            <SalesCard title={each.title} value={each.value} onClick={each.onClick} />
           </div>
         ))}
 

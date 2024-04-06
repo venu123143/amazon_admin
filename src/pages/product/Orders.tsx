@@ -16,13 +16,16 @@ const Orders = () => {
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch()
-  const { orders, modal } = useSelector((state: RootState) => state.ord)
+  const { orders } = useSelector((state: RootState) => state.ord)
 
   const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
 
   const handleDelete = (id: string) => {
-    dispatch(deleteOrder(id))
-    setDel(false)
+    dispatch(deleteOrder(id)).then(() => {
+      setDel(false)
+      dispatch(getAllOrders())
+
+    })
   }
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(getAllOrders())
-  }, [del, modal])
+  }, [])
 
   interface OrdersDataType {
     key: React.Key;

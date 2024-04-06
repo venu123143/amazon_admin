@@ -20,8 +20,10 @@ const AllProducts = () => {
   const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
 
   const handleDelete = useCallback((id: string) => {
-    dispatch(deleteProduct(id))
-    setDel(false)
+    dispatch(deleteProduct(id)).then(() => {
+      setDel(false)
+      dispatch(getAllProducts())
+    })
   }, [dispatch]);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const AllProducts = () => {
 
   useEffect(() => {
     dispatch(getAllProducts())
-  }, [del, modal])
+  }, [modal])
 
   interface ProdDataType {
     key: React.Key;
