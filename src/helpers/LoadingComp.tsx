@@ -8,12 +8,12 @@ const MainSpinner: CSSProperties = {
     position: 'absolute',
     top: "50%",
     left: "50%",
-    transform: 'translate(-50%, -50%)',
-    background: 'rgba(255, 255, 255, 0.5)', 
+    transform: 'translateX(-50%, -50%)'
 };
+
 const LoadingComp = () => {
     return (
-        <div className=''>
+        <div className='flex justify-center items-center'>
             <SyncLoader
                 color="#361AE3"
                 loading={true}
