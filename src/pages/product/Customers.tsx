@@ -51,6 +51,7 @@ const Customers = () => {
       title: 'SNO.',
       dataIndex: 'key',
       render: (text: string) => <a>{text}</a>,
+      sorter: (a, b) => parseInt(a.key as string) - parseInt(b.key as string)
     },
     {
       title: 'Name',
@@ -92,7 +93,19 @@ const Customers = () => {
     },
     {
       title: 'CreatedAt',
-      dataIndex: 'CreatedAt',
+      dataIndex: 'createdAt',
+      sorter: (a, b) => {
+        const nameA = a.createdAt
+        const nameB = b.createdAt
+
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      }
     },
     {
       title: 'Is Blocked',
