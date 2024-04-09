@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { EditorConfig } from "./Editor"
 import { base_url } from '../utils/base_url';
 interface CKEditorProps {
   value: string;

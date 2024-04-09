@@ -2,7 +2,6 @@ import { useEffect, useState, CSSProperties, useCallback } from 'react'
 import Select from 'react-select';
 import { toast } from "react-toastify";
 import { useFormik } from 'formik';
-import ReactQuill from 'react-quill';
 import Dropzone from 'react-dropzone'
 import { array, number, object, string } from 'yup';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
