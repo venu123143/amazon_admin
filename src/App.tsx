@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import './css/App.css'
 import 'react-toastify/dist/ReactToastify.css';
 
+
 // toast and routes.
 import { ToastContainer } from "react-toastify"
 import { Routes, Route } from "react-router-dom"
@@ -32,10 +33,9 @@ const Enquries = React.lazy(() => import('./pages/Dashboard/Enquries'));
 const Errorpage = React.lazy(() => import('./components/ErrorPage'));
 const AddCoupon = React.lazy(() => import('./pages/coupons/AddCoupon'));
 const CouponList = React.lazy(() => import('./pages/coupons/CouponList'));
-
 function App() {
   return (
-    <>
+    <div className='rounded-sm'>
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false}
         pauseOnFocusLoss draggable pauseOnHover theme="light" />
       <Suspense fallback={<LoadingComp />}>
@@ -67,7 +67,7 @@ function App() {
           <Route path="*" element={<Errorpage />} />
         </Routes>
       </Suspense>
-    </>
+    </div>
   )
 }
 

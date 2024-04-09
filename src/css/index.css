@@ -12,6 +12,13 @@
 }
 
 
+/* ckEditor.css */
+.ck-editor__editable_inline {
+    height: 450px;
+}
+
+/* Add more overrides as needed */
+
 body {
     font-family: 'Rubik', sans-serif;
 }

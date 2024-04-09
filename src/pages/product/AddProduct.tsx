@@ -2,7 +2,6 @@ import { useEffect, useState, CSSProperties, useCallback } from 'react'
 import Select from 'react-select';
 import { toast } from "react-toastify";
 import { useFormik } from 'formik';
-import ReactQuill from 'react-quill';
 import Dropzone from 'react-dropzone'
 import { array, number, object, string } from 'yup';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
@@ -20,6 +19,7 @@ import { getColors } from '../../Redux/Reducers/color/colorSlice';
 import { getAllBrands } from '../../Redux/Reducers/brand/brandSlice';
 import { getCategories } from '../../Redux/Reducers/pcategory/pcategorySlice';
 import { createProduct } from '../../Redux/Reducers/product/productSlice';
+import CKEditorComponent from '../../helpers/CkEditor';
 
 
 let userSchema = object({
@@ -190,7 +190,12 @@ const AddProduct = () => {
     formik.setFieldValue("images", reorderedItems);
     setImages(reorderedItems);
   };
+  const [editorContent, setEditorContent] = useState<string>('');
+  console.log(editorContent);
 
+  const handleEditorChange = (value: string) => {
+    setEditorContent(value);
+  };
   return (
     <div>
       <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Product</h3>
@@ -206,7 +211,7 @@ const AddProduct = () => {
           <label htmlFor="Description" className="block text-sm font-medium text-gray-900">
             Description <span className="text-red-500 text-lg">*</span>
           </label>
-          <ReactQuill
+          {/* <ReactQuill
             theme="snow"
             value={formik.values.description}
             onChange={(value) => formik.setFieldValue('description', value)}
@@ -216,7 +221,9 @@ const AddProduct = () => {
                 matchVisual: false, // Disable paste formatting
               },
             }}
-          />
+          /> */}
+          <CKEditorComponent value={editorContent} onChange={handleEditorChange} />
+
 
           {formik.touched.description && formik.errors.description ? (
             <div className="text-red-500 text-[14px] ">{formik.errors.description}</div>
