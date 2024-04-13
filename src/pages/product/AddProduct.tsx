@@ -201,9 +201,6 @@ const AddProduct = () => {
     formik.setFieldValue("images", reorderedItems);
     // setImages(reorderedItems);
   };
-  console.log(formik.values.description);
-  console.log(formik.touched.description, formik.errors.description);
-
   return (
     <div>
       <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Product</h3>
