@@ -10,6 +10,7 @@ import blogReducer from "./Reducers/blogs/blogSlice"
 import orderReducer from "./Reducers/orders/orderSlice"
 import EnqReducer from "./Reducers/enq/enqSlice"
 import CouponReducer from "./Reducers/coupons/CouponSlice"
+import UploadReducer from "./Reducers/upload/uploadSlice"
 
 export const Store = configureStore({
     reducer: {
@@ -23,7 +24,8 @@ export const Store = configureStore({
         blogs: blogReducer,
         ord: orderReducer,
         enq: EnqReducer,
-        coupon: CouponReducer
+        coupon: CouponReducer,
+        upload: UploadReducer
     }
 
 })

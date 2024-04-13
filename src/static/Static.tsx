@@ -45,3 +45,16 @@ export const data = [
   },
 ];
 
+
+export interface InitialValues {
+  title: string;
+  description: string;
+  price: string;
+  quantity: string;
+  category: string;
+  brand: string;
+  color: string[];
+  tags: string[];
+  images?: string[];
+}
+

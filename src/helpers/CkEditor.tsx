@@ -10,9 +10,7 @@ interface CKEditorProps {
 const CKEditorComponent: React.FC<CKEditorProps> = ({ value, onChange }) => {
   const editorRef = useRef<any>(null);
 
-  const handleEditorChange = (event: any, editor: any) => {
-    console.log(event);
-
+  const handleEditorChange = (_: any, editor: any) => {
     const data = editor.getData();
     onChange(data);
   };
@@ -24,7 +22,7 @@ const CKEditorComponent: React.FC<CKEditorProps> = ({ value, onChange }) => {
       config={{
         ckfinder: {
           // uploadUrl: 'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',  
-          uploadUrl: `${base_url}/product/uploadCkImage?command=QuickUpload&type=Files&responseType=json`,  
+          uploadUrl: `${base_url}/product/uploadCkImage?command=QuickUpload&type=Files&responseType=json`,
           options: {
             resourceType: 'Images',
           }
