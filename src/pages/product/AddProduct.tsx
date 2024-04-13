@@ -201,6 +201,7 @@ const AddProduct = () => {
     formik.setFieldValue("images", reorderedItems);
     // setImages(reorderedItems);
   };
+  console.log(formik.values.description);
 
   return (
     <div>
