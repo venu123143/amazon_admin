@@ -20,6 +20,7 @@ import { getAllBrands } from '../../Redux/Reducers/brand/brandSlice';
 import { getCategories } from '../../Redux/Reducers/pcategory/pcategorySlice';
 import { createProduct } from '../../Redux/Reducers/product/productSlice';
 import CKEditorComponent from '../../helpers/CkEditor';
+import { uploadImages, resetImages } from '../../Redux/Reducers/upload/uploadSlice';
 
 
 let userSchema = object({
@@ -36,7 +37,7 @@ let userSchema = object({
 const AddProduct = () => {
   const [color, setColor] = useState<any>([])
   const [tags, setTags] = useState<any>([])
-  const [images, setImages] = useState<any>([])
+  const [image, setImages] = useState<any>([])
 
   const dispatch: AppDispatch = useDispatch()
   const navigate = useNavigate();
@@ -48,13 +49,16 @@ const AddProduct = () => {
     }
   }, [message, user, isError, isSuccess])
 
-  const { isLoading } = useSelector((state: RootState) => state.product)
+  let { isLoading } = useSelector((state: RootState) => state.product)
   const { brands } = useSelector((state: RootState) => state.brand)
+  const { images, uploadLoading } = useSelector((state: RootState) => state.upload)
   const { categories } = useSelector((state: RootState) => state.pcategory)
   const { colors } = useSelector((state: RootState) => state.color)
   const options = colors.map((color) => ({ value: color._id, label: color.title }))
   const value = color.map((clr: any) => (clr.value))
-
+  if (isLoading || uploadLoading) {
+    isLoading = true
+  }
   const override: CSSProperties = {
     display: "block",
     margin: "0 auto",
@@ -76,10 +80,10 @@ const AddProduct = () => {
       formik.values.color = value
     if (tags.length !== 0)
       formik.values.tags = tags
-    if (images.length !== 0)
+    if (image.length !== 0)
       // formik.values.images = images
-      formik.setFieldValue('images', images);
-  }, [color, tags, images])
+      formik.setFieldValue('images', image);
+  }, [color, tags, image])
 
   const formik = useFormik({
     initialValues: {
@@ -96,31 +100,38 @@ const AddProduct = () => {
     validationSchema: userSchema,
     onSubmit: values => {
       const formData = new FormData();
-      formData.append('title', values.title);
-      formData.append('description', values.description);
-      formData.append('category', values.category);
-      formData.append('brand', values.brand);
-      formData.append('quantity', JSON.stringify(values.quantity));
-      formData.append('price', JSON.stringify(values.price));
-      formData.append('color', JSON.stringify(values.color));
-      formData.append('tags', JSON.stringify(values.tags));
-
       // Append each image with the key "images"
-      for (let i = 0; i < images.length; i++) {
-        formData.append('images', images[i]);
+      for (let i = 0; i < values.images.length; i++) {
+        formData.append('images', values.images[i]);
       }
-      dispatch(createProduct(formData));
-      formik.resetForm();
-      setTags([])
-      setImages([])
+      if (formik.values.images.length > 0) {
+        dispatch(uploadImages(formData))
+      } else {
+        dispatch(createProduct(values)).then(() => {
+          formik.resetForm();
+          setTags([])
+          setImages([])
+        })
+      }
     },
   });
+
+  useEffect(() => {
+    if (images.length > 0) {
+      dispatch(createProduct({ ...formik.values, images: images })).then(() => {
+        dispatch(resetImages())
+        formik.resetForm();
+        setTags([])
+        setImages([])
+      })
+    }
+  }, [images])
 
   const handleRemoveImg = useCallback((id: number) => {
     const imagesCopy = [...formik.values.images];
     imagesCopy.splice(id, 1);
     formik.setFieldValue("images", imagesCopy);
-    setImages(imagesCopy)
+    // setImages(imagesCopy)
   }, [formik.values.images]);
 
 
@@ -136,7 +147,7 @@ const AddProduct = () => {
   var nextImage = () => {
     if (currentIndex! < images.length - 1) {
       setCurrentIndex(currentIndex! + 1);
-      setCurrentImage(URL.createObjectURL(images[currentIndex! + 1]));
+      setCurrentImage(URL.createObjectURL(formik.values.images[currentIndex! + 1]));
     }
     else if (currentIndex! >= images.length - 1) {
       setIsFullscreen(false);
@@ -145,7 +156,7 @@ const AddProduct = () => {
   var prevImage = () => {
     if (currentIndex! > 0) {
       setCurrentIndex(currentIndex! - 1);
-      setCurrentImage(URL.createObjectURL(images[currentIndex! - 1]));
+      setCurrentImage(URL.createObjectURL(formik.values.images[currentIndex! - 1]));
     } else if (currentIndex! <= 0) {
       setIsFullscreen(false);
     }
@@ -153,7 +164,7 @@ const AddProduct = () => {
   var handleSetImage = (index: number) => {
     setCurrentIndex(index);
     setIsFullscreen(true);
-    setCurrentImage(URL.createObjectURL(images[index]));
+    setCurrentImage(URL.createObjectURL(formik.values.images[index]));
   };
 
   const reorder = (list: any, startIndex: any, endIndex: any) => {
@@ -188,14 +199,9 @@ const AddProduct = () => {
       result.destination.index
     );
     formik.setFieldValue("images", reorderedItems);
-    setImages(reorderedItems);
+    // setImages(reorderedItems);
   };
-  const [editorContent, setEditorContent] = useState<string>('');
-  console.log(editorContent);
 
-  const handleEditorChange = (value: string) => {
-    setEditorContent(value);
-  };
   return (
     <div>
       <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Product</h3>
@@ -222,7 +228,7 @@ const AddProduct = () => {
               },
             }}
           /> */}
-          <CKEditorComponent value={editorContent} onChange={handleEditorChange} />
+          <CKEditorComponent value={formik.values.description} onChange={(value) => formik.setFieldValue('description', value)} />
 
 
           {formik.touched.description && formik.errors.description ? (
@@ -314,21 +320,6 @@ const AddProduct = () => {
           <label htmlFor="AddImages" className="block text-sm font-medium text-gray-900">
             Add Images <span className="text-red-500 text-lg">*</span>
           </label>
-          {/* <div className="mt-10 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-fr auto-flow-dense">
-            {formik.values?.images?.map((each: any, index: number) => (
-              <div key={index} className='inline-flex justify-center'>
-                <div className="relative">
-                  <img src={URL.createObjectURL(each)} onClick={() => {
-                    handleSetImage(index);
-                  }} alt="productimages" className="max-w-full img h-auto align-middle inline-block rounded-lg object-cover object-center col-span-1" />
-                  <RxCross2 onClick={() => handleRemoveImg(index)}
-                    className="absolute top-3 right-3 bg-gray-300 hover:bg-white p-2 cursor-pointer rounded-full"
-                    size={35}
-                  />
-                </div>
-              </div>
-            ))}
-          </div> */}
 
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="images">

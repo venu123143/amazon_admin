@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import productService from "./productService"
 import { toast } from "react-toastify";
+import { InitialValues } from "../../../static/Static";
 
 export interface IProductState {
     _id?: string;
@@ -34,7 +35,7 @@ export const getAllProducts = createAsyncThunk('productSlice/getAllProducts', as
     }
 })
 
-export const createProduct = createAsyncThunk('productSlice/createProduct', async (data: FormData, thunkAPI) => {
+export const createProduct = createAsyncThunk('productSlice/createProduct', async (data: InitialValues, thunkAPI) => {
     try {
         const prod = await productService.create(data)
         return prod

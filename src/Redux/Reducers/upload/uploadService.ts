@@ -1,8 +1,8 @@
 import { base_url } from "../../../utils/base_url";
 import axios from "axios"
 
-const uploadImg = async (data: any) => { 
-    const res = await axios.post(`${base_url}/category/`, data, { withCredentials: true })
+const uploadImg = async (data: FormData) => {
+    const res = await axios.post(`${base_url}/product/upload`, data, { withCredentials: true })
     return res.data
 }
 
