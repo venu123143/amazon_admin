@@ -88,7 +88,7 @@ const AddProduct = () => {
   const formik = useFormik({
     initialValues: {
       title: '',
-      description: '',
+      description: "",
       price: "",
       quantity: "",
       category: '',
@@ -197,11 +197,12 @@ const AddProduct = () => {
       images,
       result.source.index,
       result.destination.index
-    );
+    ); 
     formik.setFieldValue("images", reorderedItems);
     // setImages(reorderedItems);
   };
   console.log(formik.values.description);
+  console.log(formik.touched.description, formik.errors.description);
 
   return (
     <div>
