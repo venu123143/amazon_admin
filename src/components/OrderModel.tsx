@@ -1,25 +1,37 @@
-import React from "react"
+import React, { CSSProperties } from "react"
 import { RxCross2 } from "react-icons/rx"
 import { AppDispatch, RootState } from "../Redux/Store"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { openModal, updateOrder } from "../Redux/Reducers/orders/orderSlice"
+import { getAllOrders, openModal, updateOrder } from "../Redux/Reducers/orders/orderSlice"
 import StatusInput from "./StatusInput"
+import { SyncLoader } from "react-spinners"
 
 const OrderModal = ({ status, title, id }: any) => {
-  // console.log(status, id);
 
-  const { Status, index, modal } = useSelector((state: RootState) => state.ord)
-  console.log(index, id, Status);
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+    width: 380,
+    position: 'absolute',
+    top: "50%",
+    left: "50%",
+    transform: 'translateX(-50%, -50%)'
+  };
+
+  const { Status, index, modal, isLoading } = useSelector((state: RootState) => state.ord)
 
   const dispatch: AppDispatch = useDispatch()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateOrder({ id, Status, index }))
+    dispatch(updateOrder({ id, Status, index })).then(() => {
+      dispatch(getAllOrders())
+    })
   }
   return (
     <div>
-      <div className={`absolute top-1/2 left-1/2   -translate-x-1/2 -translate-y-1/2 w-full z-50 transition-all ease-in ${modal === true ? "scale-100 duration-200" : "scale-0 duration-200"}  p-4 bg-white overflow-x-hidden overflow-y-auto min-h-[400px] rounded-md min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px] `}
+      <div className={`absolute top-1/2 left-1/2   -translate-x-1/2 -translate-y-1/2 w-full z-20 transition-all ease-in ${modal === true ? "scale-100 duration-200" : "scale-0 duration-200"}  p-4 bg-white overflow-x-hidden overflow-y-auto min-h-[400px] rounded-md min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px] `}
         id={title}>
         <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
           id="exampleModalLgLabel">
@@ -44,7 +56,17 @@ const OrderModal = ({ status, title, id }: any) => {
           </button>
         </form>
       </div >
-      <div onClick={() => openModal(false)} className={`${modal === true ? "block delay-75" : "hidden"} transition-all ease-in absolute top-0 left-0 z-40 bg-black opacity-50 w-full h-screen`}>
+
+      <div className={`${isLoading === true ? "block bg-black opacity-50 absolute top-0 left-0  z-40 w-full h-screen" : "hidden"}`}>
+        <SyncLoader
+          color="#361AE3"
+          loading={isLoading}
+          cssOverride={override}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+      <div onClick={() => dispatch(openModal(false))} className={`${modal === true ? "block delay-75" : "hidden"} transition-all ease-in absolute top-0 left-0 z-10 bg-black opacity-50 w-full h-screen`}>
       </div>
     </div >
   )
