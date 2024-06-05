@@ -1,5 +1,5 @@
 import type { ColumnsType } from 'antd/es/table';
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import Table from 'antd/es/table';
 
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../Redux/Store"
 import { getAllUsers } from '../../Redux/Reducers/customers/customerSlice';
 import { useNavigate } from 'react-router-dom';
-
+import ToggleSwitch from '../../helpers/ToggleSwitch';
 const Customers = () => {
   const dispatch: AppDispatch = useDispatch()
   const { customers } = useSelector((state: RootState) => state.customer)
@@ -19,7 +19,7 @@ const Customers = () => {
       navigate('/')
     }
   }, [message, user, isError, isSuccess])
-  
+
   useEffect(() => {
     dispatch(getAllUsers())
   }, [])
@@ -30,8 +30,7 @@ const Customers = () => {
     Name: string;
     Email: string;
     Mobile: string;
-    Blocked: boolean;
-
+    Blocked: any;
   }
   const tableData: Array<DataType> = [];
   var count = 0;
@@ -40,10 +39,14 @@ const Customers = () => {
       tableData.push({
         key: ++count,
         Name: customers[i].firstname + " " + customers[i].lastname,
-        Email: customers[i].email,
-        Mobile: customers[i].mobile,
+        Email: customers[i].email ? customers[i].email : "no value",
+        Mobile: customers[i].mobile ? customers[i].mobile : "no value",
         CreatedAt: new Date(customers[i].createdAt).toLocaleDateString(),
-        Blocked: customers[i].isBlocked.toString(),
+        Blocked: (
+          <ToggleSwitch isChecked={customers[i].isBlocked} userId={customers[i]._id} index={i} />
+        )
+        // customers[i].isBlocked.toString(),
+
       })
   }
   const columns: ColumnsType<DataType> = [
@@ -108,7 +111,7 @@ const Customers = () => {
       }
     },
     {
-      title: 'Is Blocked',
+      title: 'Block User',
       dataIndex: 'Blocked',
     },
   ];

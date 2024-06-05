@@ -23,6 +23,15 @@ export const deleteUser = createAsyncThunk('customerSlice/deleteUser', async (id
     }
 })
 
+export const blockOrUnBlock = createAsyncThunk('authSlice/blockOrUnBlock', async (data: { isBlocked: boolean, userId: string }, thunkAPI) => {
+    try {
+        const res = await customerService.blockOrUnBlock(data?.isBlocked, data?.userId)
+        return res
+
+    } catch (error: any) {
+        return thunkAPI.rejectWithValue(error?.response?.data)
+    }
+})
 interface CustomerState {
     customers: any[]; // You can replace 'any' with a specific type for customers
     isError: boolean;
@@ -42,7 +51,11 @@ const initialState: CustomerState = {
 const customerSlice = createSlice({
     name: 'customerSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        toggleBlockUser: (state, action) => {
+            state.customers[action.payload.index].isBlocked = action.payload.value
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getAllUsers.pending, (state) => {
             state.isLoading = true
@@ -81,9 +94,27 @@ const customerSlice = createSlice({
             })
         })
 
+        builder.addCase(blockOrUnBlock.pending, (state) => {
+            state.isLoading = true
+            state.isSuccess = false
+            state.isError = false
+        }).addCase(blockOrUnBlock.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.isSuccess = true
+            toast.success(action.payload.message, {
+                position: 'top-right'
+            })
+        }).addCase(blockOrUnBlock.rejected, (state, action: PayloadAction<any>) => {
+            state.isError = true
+            state.isLoading = false
+            state.message = action.payload?.message
+            toast.error(state.message, {
+                position: 'top-right'
+            })
+        })
     }
 })
 
-export const { } = customerSlice.actions
+export const { toggleBlockUser } = customerSlice.actions
 
 export default customerSlice.reducer

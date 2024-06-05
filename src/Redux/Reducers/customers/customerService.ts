@@ -10,10 +10,14 @@ const deleteUser = async (id: string) => {
     return res
 }
 
+const blockOrUnBlock = async (isBlocked: boolean, userId: string) => {
+    const res = await axios.put(`${base_url}/users/block-unBlock/${userId}`, { isBlocked }, { withCredentials: true })
+    return res.data
+}
 const customerService = {
     getUsers,
     deleteUser,
-    
+    blockOrUnBlock
 }
 
 export default customerService

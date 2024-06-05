@@ -27,11 +27,13 @@ const reset = async (token: string, password: string) => {
     const res = await axios.put(`${base_url}/users/resetpassword/${token}`, { password })
     return res.data
 }
+
+
 const authService = {
     login,
     logout,
     forgot,
-    reset
+    reset,
 }
 
 export default authService
