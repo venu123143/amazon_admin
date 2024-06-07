@@ -15,9 +15,9 @@ const AllProducts = () => {
   const [id, setId] = useState("")
 
   const dispatch: AppDispatch = useDispatch()
-  const { products, modal } = useSelector((state: RootState) => state.product)
+  const { products, modal, isSuccess } = useSelector((state: RootState) => state.product)
   const navigate = useNavigate();
-  const { message, user, isLoading, isError, isSuccess } = useSelector((state: RootState) => state.auth)
+  const { message, user, isLoading, isError } = useSelector((state: RootState) => state.auth)
 
   const handleDelete = useCallback((id: string) => {
     dispatch(deleteProduct(id)).then(() => {
@@ -30,10 +30,12 @@ const AllProducts = () => {
     if (user === null) {
       navigate('/')
     }
-  }, [message, user, isLoading, isError, isSuccess])
+  }, [message, user, isLoading, isError])
 
   useEffect(() => {
-    dispatch(getAllProducts())
+    if (!modal && products?.length < 1) {
+      dispatch(getAllProducts())
+    }
   }, [modal])
 
   interface ProdDataType {

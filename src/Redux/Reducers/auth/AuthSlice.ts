@@ -1,3 +1,6 @@
+
+
+
 import { createSlice, createAsyncThunk, PayloadAction, Slice } from "@reduxjs/toolkit"
 import authService from "./AuthService"
 import { toast } from "react-toastify";
@@ -35,7 +38,6 @@ export const login = createAsyncThunk('authSlice/admin-login', async (user: User
     try {
         const res = await authService.login(user)
         return res
-
     } catch (error: any) {
         return thunkAPI.rejectWithValue(error?.response?.data)
     }
