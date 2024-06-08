@@ -30,7 +30,7 @@ const AllProducts = () => {
     if (user === null) {
       navigate('/')
     }
-  }, [message, user, isLoading, isError])
+  }, [message, user, isLoading, isSuccess, isError])
 
   useEffect(() => {
     if (!modal && products?.length < 1) {
