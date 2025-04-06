@@ -65,7 +65,7 @@ function App() {
       >
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false}
           pauseOnFocusLoss draggable pauseOnHover theme="light" />
-        <Suspense fallback={<LoadingComp />}>
+        <Suspense fallback={<LoadingComp theme={isDarkMode ? 'dark' : 'light'} />}>
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<SignUpPage />} />

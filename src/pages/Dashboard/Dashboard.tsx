@@ -98,7 +98,7 @@ const Dashboard = () => {
 
       </div>
       <div className="my-4">
-        <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Income Statistics</h3>
+        <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 text-gray-900 dark:text-white">Income Statistics</h3>
         <Chart options={options} series={series} type="bar" className="" />
       </div>
       <div className="my-4">

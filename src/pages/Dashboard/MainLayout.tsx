@@ -25,7 +25,7 @@ const MainLayout: React.FC = () => {
     const dispatch: AppDispatch = useDispatch()
     const [collapsed, setCollapsed] = useState(false);
     const [dropdown, setDropDown] = useState(false);
-    const { isDarkMode } = useTheme();
+    const { isDarkMode, toggleTheme } = useTheme();
 
     const pathName = window.location.pathname
     const incluProduct = pathName.includes('product');
@@ -199,11 +199,11 @@ const MainLayout: React.FC = () => {
                 />
             </Sider>
 
-            <Layout className={`${isDarkMode ? 'dark:bg-gray-900' : 'bg-white'}` }>
+            <Layout className={`${isDarkMode ? 'dark:bg-gray-900' : 'bg-white'}`}>
                 {/* header */}
                 <Header style={{ padding: 0 }} className={`flex ${isDarkMode ? 'dark:bg-gray-800' : 'bg-white'} justify-between`}>
                     <div className='flex justify-center items-center'>
-                        <Button 
+                        <Button
                             type="text"
                             icon={collapsed ? <AiOutlineMenuUnfold size={20} /> : <AiOutlineMenuFold size={20} />}
                             onClick={() => setCollapsed(!collapsed)}
@@ -219,16 +219,15 @@ const MainLayout: React.FC = () => {
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <BsSearch className={isDarkMode ? "text-gray-400" : "text-gray-500"} />
                             </div>
-                            <input 
-                                type="search" 
-                                id="default-search" 
+                            <input
+                                type="search"
+                                id="default-search"
                                 placeholder="Search here"
-                                className={`block w-full h-full p-2 pl-10 text-sm border outline-none focus:shadow-md rounded-lg ${
-                                    isDarkMode 
-                                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-600' 
-                                        : 'bg-gray-200 border-gray-300 text-gray-900 focus:bg-white'
-                                }`}
-                                required 
+                                className={`block w-full h-full p-2 pl-10 text-sm border outline-none focus:shadow-md rounded-lg ${isDarkMode
+                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-600'
+                                    : 'bg-gray-200 border-gray-300 text-gray-900 focus:bg-white'
+                                    }`}
+                                required
                             />
                         </form>
                     </div>
@@ -238,22 +237,19 @@ const MainLayout: React.FC = () => {
                         </div>
                         <div className='notification relative p-1'>
                             <IoIosNotifications size={25} className={isDarkMode ? "text-white" : "text-gray-800"} />
-                            <span className={`absolute top-0 right-0 text-xs ${
-                                isDarkMode ? 'bg-gray-600 text-white' : 'bg-red-500 text-white'
-                            } rounded-full w-4 h-4 flex items-center justify-center`}>1</span>
+                            <span className={`absolute top-0 right-0 text-xs ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-red-500 text-white'
+                                } rounded-full w-4 h-4 flex items-center justify-center`}>1</span>
                         </div>
-                        <div 
-                            onClick={() => setDropDown(!dropdown)} 
-                            className={`flex relative items-center justify-between gap-3 cursor-pointer p-3 ${
-                                isDarkMode 
-                                    ? 'hover:bg-gray-700' 
-                                    : `hover:bg-gradient-to-r from-slate-200 ${
-                                        randomColor === "red" ? "to-red-400" : 
-                                        randomColor === "blue" ? "to-blue-400" : 
-                                        randomColor === "green" ? "to-green-400" : 
-                                        randomColor === "yellow" ? "to-yellow-400" : "to-pink-400"
-                                    }`
-                            }`}
+                        <div
+                            onClick={() => setDropDown(!dropdown)}
+                            className={`flex relative items-center justify-between gap-3 cursor-pointer p-3 ${isDarkMode
+                                ? 'hover:bg-gray-700'
+                                : `hover:bg-gradient-to-r from-slate-200 ${randomColor === "red" ? "to-red-400" :
+                                    randomColor === "blue" ? "to-blue-400" :
+                                        randomColor === "green" ? "to-green-400" :
+                                            randomColor === "yellow" ? "to-yellow-400" : "to-pink-400"
+                                }`
+                                }`}
                         >
                             <div className='image'>
                                 <img src={profile} alt="profile" className='w-[40px] h-[40px] rounded-full' />
@@ -268,28 +264,47 @@ const MainLayout: React.FC = () => {
                             </div>
                             {
                                 dropdown && (
-                                    <div id="dropdownHover" className={`z-10 absolute right-0 top-16 w-full rounded-lg shadow ${
-                                        isDarkMode ? 'bg-gray-700' : 'bg-white'
-                                    }`}>
-                                        <ul className={`py-2 text-sm ${
-                                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                                        }`} aria-labelledby="dropdownHoverButton">
+                                    <div
+                                        id="dropdownHover"
+                                        className={`z-10 absolute right-0 top-16 w-full rounded-lg shadow ${isDarkMode ? 'bg-gray-700' : 'bg-white'
+                                            }`}
+                                    >
+                                        <ul
+                                            className={`py-2 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                                                }`}
+                                            aria-labelledby="dropdownHoverButton"
+                                        >
                                             <li>
-                                                <Link to="/" className={`block px-4 py-2 ${
-                                                    isDarkMode ? 'hover:bg-gray-600 hover:text-white' : 'hover:bg-gray-100'
-                                                }`}>View Profile</Link>
+                                                <Link
+                                                    to="/"
+                                                    className={`block px-4 py-2 ${isDarkMode
+                                                        ? 'hover:bg-gray-600 hover:text-white'
+                                                        : 'hover:bg-gray-100'
+                                                        }`}
+                                                >
+                                                    View Profile
+                                                </Link>
                                             </li>
+
                                             <li>
-                                                <Link to="/" className={`block px-4 py-2 ${
-                                                    isDarkMode ? 'hover:bg-gray-600 hover:text-white' : 'hover:bg-gray-100'
-                                                }`}>Change Settings</Link>
+                                                <button
+                                                    onClick={toggleTheme}
+                                                    className={`w-full text-left px-4 py-2 ${isDarkMode
+                                                        ? 'hover:bg-gray-600 hover:text-white'
+                                                        : 'hover:bg-gray-100'
+                                                        }`}
+                                                >
+                                                    Toggle Theme
+                                                </button>
                                             </li>
+
                                             <li>
-                                                <span 
-                                                    onClick={handleSignOut} 
-                                                    className={`block px-4 py-2 ${
-                                                        isDarkMode ? 'hover:bg-gray-600 hover:text-white' : 'hover:bg-gray-100'
-                                                    } cursor-pointer`}
+                                                <span
+                                                    onClick={handleSignOut}
+                                                    className={`block px-4 py-2 cursor-pointer ${isDarkMode
+                                                        ? 'hover:bg-gray-600 hover:text-white'
+                                                        : 'hover:bg-gray-100'
+                                                        }`}
                                                 >
                                                     Sign out
                                                 </span>
@@ -298,6 +313,7 @@ const MainLayout: React.FC = () => {
                                     </div>
                                 )
                             }
+
                         </div>
                     </div>
                 </Header>
