@@ -8,10 +8,10 @@ import { Store } from "./Redux/Store.ts"
 import { ThemeProvider } from "./context/themecontent.tsx"
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ThemeProvider>
-  <Provider store={Store}> 
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
+    <Provider store={Store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </ThemeProvider>
 )

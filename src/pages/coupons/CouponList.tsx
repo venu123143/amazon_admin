@@ -126,7 +126,7 @@ const couponList = () => {
   ];
   return (
     <div className="my-4">
-      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">List of coupons</h3>
+      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 text-gray-900 dark:text-white">List of coupons</h3>
       <div>
         <Table
           columns={columns}

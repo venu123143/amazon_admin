@@ -122,7 +122,7 @@ const CategoryList = () => {
 
   return (
     <div className="my-4">
-      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Product Category List</h3>
+      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 text-gray-900 dark:text-white">Product Category List</h3>
       <div>
         <Table
           columns={columns}

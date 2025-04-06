@@ -282,22 +282,6 @@ main::-webkit-scrollbar {
     background-image: radial-gradient(circle at 50% 0, #f5f5f5, #c4c4c4);
 }
 
-.ql-snow.ql-toolbar button,
-.ql-snow .ql-toolbar button {
-    color: #c4c4c4;
-
-}
-
-.ql-snow.ql-toolbar button svg,
-.ql-snow .ql-toolbar button svg {
-    color: #c4c4c4;
-
-}
-
-.ql-formats {
-    color: #c4c4c4;
-}
-
 /* ck editor */
 .ck.ck-editor__main>.ck-editor__editable {
     background: #1f2937;
@@ -309,3 +293,5 @@ main::-webkit-scrollbar {
     background: #1f2937;
     color: #c4c4c4;
 }
+
+

@@ -87,7 +87,7 @@ const Dashboard = () => {
 
   return (
     <div className="bg-transparent">
-      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Dashboard</h3>
+      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 text-gray-900 dark:text-white">Dashboard</h3>
 
       <div className="block 1100px:flex justify-between items-center gap-3 space-y-1 w-full">
         {cards.map((each, index) => (

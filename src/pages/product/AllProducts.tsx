@@ -141,7 +141,7 @@ const AllProducts = () => {
   ];
   return (
     <div className="my-4">
-      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">All Products</h3>
+      <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 text-gray-900 dark:text-white">All Products</h3>
       <div>
         <Table
           columns={columns}
