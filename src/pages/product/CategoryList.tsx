@@ -8,12 +8,10 @@ import { deleteCategory, getCategories } from "../../Redux/Reducers/pcategory/pc
 import { useNavigate } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import DeleteModal from "../../components/DeleteModal";
-import EditModal from "../../components/EditModal";
 
 const CategoryList = () => {
   const [del, setDel] = useState<any>(false)
   const [id, setId] = useState("")
-  const [modal, setOpenModal] = useState(false)
 
   const dispatch: AppDispatch = useDispatch()
   const { categories } = useSelector((state: RootState) => state.pcategory)
@@ -55,7 +53,7 @@ const CategoryList = () => {
       CreatedAt: new Date(categories[i].createdAt).toLocaleDateString(),
       Action: (
         <div className="flex space-x-2">
-          <li className="cursor-pointer hover:text-blue-500" onClick={() => setOpenModal(true)} >
+          <li className="cursor-pointer hover:text-blue-500">
             <AiOutlineEdit size={20} />
           </li>
           <li className="cursor-pointer hover:text-blue-500" >
@@ -128,7 +126,6 @@ const CategoryList = () => {
           columns={columns}
           dataSource={tableData} />
         <DeleteModal openModal={setDel} modal={del} onClick={() => handleDelete(id)} />
-        <EditModal openModal={setOpenModal} modal={modal} title="product category " />
       </div>
     </div>
   )

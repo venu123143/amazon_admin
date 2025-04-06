@@ -146,7 +146,7 @@ const BrandList = () => {
         <Table
           columns={columns}
           dataSource={tableData} />
-        <EditModal modal={edit} openModal={setEdit} title="brand" name="title"
+        <EditModal modal={edit} openModal={setEdit} title="brand"
           value={formik.values.title} onChange={formik.handleChange("title")} onBlur={formik.handleBlur('title')}
           onSubmit={formik.handleSubmit} />
         <DeleteModal openModal={setDel} modal={del} onClick={() => handleDelete(id)} />

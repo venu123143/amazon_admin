@@ -52,10 +52,10 @@ const MainLayout: React.FC = () => {
         dispatch(logout())
     }
     return (
-        <Layout className={`w-full no-scrollbar ${isDarkMode ? 'dark' : ''}`}>
-            <Sider className={`h-screen overflow-y-scroll ${isDarkMode ? 'dark:bg-gray-800' : 'bg-white'}`} trigger={null} collapsible collapsed={collapsed} >
-                <div className={`bg-gradient-to-l ${isDarkMode ? 'from-gray-700 to-gray-900' : 'from-red-400 to-gray-500'}`}>
-                    <h2 className='text-white text-center py-3 mb-0'>
+        <Layout className={`w-full  ${isDarkMode ? 'dark' : ''}`}>
+            <Sider className={`h-screen no-scrollbar overflow-y-scroll ${isDarkMode ? 'dark:bg-gray-800' : 'bg-white'}`} trigger={null} collapsible collapsed={collapsed} >
+                <div className={`bg-gradient-to-l h-16 ${isDarkMode ? 'from-gray-700 to-gray-900' : 'from-red-400 to-gray-500'}`}>
+                    <h2 className='text-white text-center flex justify-center items-center h-full mb-0'>
                         <span className={`${collapsed === true ? "block" : "hidden"} sm-logo font-Rubik font-bold text-[1.2rem]`}>Admin</span>
                         <span className={`${collapsed === true ? "hidden" : "block"} lg-logo font-Rubik font-bold text-[1.2rem]`}>Amazon Admin</span>
                     </h2>
@@ -199,7 +199,7 @@ const MainLayout: React.FC = () => {
                 />
             </Sider>
 
-            <Layout className={isDarkMode ? 'dark:bg-gray-900' : 'bg-white'}>
+            <Layout className={`${isDarkMode ? 'dark:bg-gray-900' : 'bg-white'}` }>
                 {/* header */}
                 <Header style={{ padding: 0 }} className={`flex ${isDarkMode ? 'dark:bg-gray-800' : 'bg-white'} justify-between`}>
                     <div className='flex justify-center items-center'>

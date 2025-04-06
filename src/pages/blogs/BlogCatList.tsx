@@ -150,7 +150,7 @@ const BlogCatList = () => {
           dataSource={tableData}
         />
         <DeleteModal openModal={setDel} modal={del} onClick={() => handleDelete(id)} />
-        <EditModal openModal={setEdit} modal={edit} title="Blog Category" name="title"
+        <EditModal openModal={setEdit} modal={edit} title="Blog Category"
           value={formik.values.title} onChange={formik.handleChange("title")} onBlur={formik.handleBlur('title')}
           onSubmit={formik.handleSubmit} />
 
