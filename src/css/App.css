@@ -65,7 +65,7 @@ main::-webkit-scrollbar {
 
 
 /* images grid  */
-* Home page start */ .grid-wrapper img {
+.grid-wrapper img {
     max-width: 100%;
     height: auto;
     vertical-align: middle;

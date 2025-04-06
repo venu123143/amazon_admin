@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type CSSProperties, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Select from "react-select"
 import { toast } from "react-toastify"
 import { useFormik } from "formik"
@@ -62,16 +62,6 @@ const AddProduct = () => {
     isLoading = true
   }
 
-  const override: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
-    width: 380,
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translateX(-50%, -50%)",
-  }
 
   useEffect(() => {
     dispatch(getColors())

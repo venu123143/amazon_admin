@@ -97,7 +97,7 @@ const AddCoupon = () => {
                                         : 'bg-gray-50 border-gray-300 text-gray-900'
                                     }`}
                                 calendarClassName={isDarkMode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white text-gray-900 border-gray-300'}
-                                dayClassName={(date) =>
+                                dayClassName={() =>
                                     isDarkMode
                                         ? 'hover:bg-gray-600 text-white'
                                         : 'hover:bg-gray-100 text-gray-900'
