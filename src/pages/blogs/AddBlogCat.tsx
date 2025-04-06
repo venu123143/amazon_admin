@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from '../../Redux/Store'
 import { createBlogCategory } from '../../Redux/Reducers/blogCategory/blogCatSlice'
 import { SyncLoader } from 'react-spinners'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from "../../context/themecontent"
 
 let BlogCatSchema = object({
     title: string().required('Title is Required'),
@@ -18,6 +19,7 @@ const AddBlogCat = () => {
     const { isLoading } = useSelector((state: RootState) => state.blogCat)
     const navigate = useNavigate()
     const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
+    const { isDarkMode } = useTheme()
 
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const AddBlogCat = () => {
             navigate('/')
         }
     }, [message, user, isLoading, isError, isSuccess])
-    
+
     const override: CSSProperties = {
         display: "block",
         margin: "0 auto",
@@ -47,8 +49,8 @@ const AddBlogCat = () => {
         }
     })
     return (
-        <div>
-            <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Blog Category</h3>
+        <div className={`p-6 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+            <h3 className={`font-Rubik font-[550] text-[1.52rem] font  my-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Add Blog Category</h3>
             <div>
                 <form action="" method="post" className='space-y-3' onSubmit={formik.handleSubmit}>
                     <CustomInput value={formik.values.title} onChange={formik.handleChange("title")} onBlur={formik.handleBlur("title")} name="title" type="text" placeholder="Enter Blog Category" className="blogcategory uppercase" id="blogCategory" />

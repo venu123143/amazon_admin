@@ -1,5 +1,4 @@
-import { CSSProperties, useEffect } from 'react'
-
+import { useEffect } from 'react'
 import { object, string } from 'yup'
 import CustomInput from '../../components/CustomInput'
 import { useFormik } from 'formik'
@@ -8,33 +7,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createColor } from '../../Redux/Reducers/color/colorSlice'
 import { SyncLoader } from 'react-spinners'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from "../../context/themecontent"
 
-let ColorSchema = object({
+const ColorSchema = object({
     title: string().required('Title is Required'),
-
 })
+
 const AddColor = () => {
     const dispatch: AppDispatch = useDispatch()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const { isDarkMode } = useTheme()
+
     const { isLoading } = useSelector((state: RootState) => state.color)
     const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
-    
+
     useEffect(() => {
         if (user === null) {
             navigate('/')
         }
     }, [message, user, isLoading, isError, isSuccess])
-    
-    const override: CSSProperties = {
-        display: "block",
-        margin: "0 auto",
-        borderColor: "red",
-        width: 380,
-        position: 'absolute',
-        top: "50%",
-        left: "50%",
-        transform: 'translateX(-50%, -50%)'
-    };
+
     const formik = useFormik({
         initialValues: {
             title: ''
@@ -45,33 +37,45 @@ const AddColor = () => {
             formik.resetForm()
         }
     })
-    return (
-        <div>
-            <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Color</h3>
-            <div>
-                <form action="" method="post" className='space-y-3' onSubmit={formik.handleSubmit}>
-                    <CustomInput value={formik.values.title} onChange={formik.handleChange("title")} onBlur={formik.handleBlur("title")} name="title" type="text" placeholder="Enter Color Name" className="AddColor uppercase" id="AddColor" />
-                    {formik.touched.title && formik.errors.title ? (
-                        <div className="text-red-500 text-[14px] ">{formik.errors.title}</div>
-                    ) : null}
 
-                    <button className='px-5 py-2 rounded-md bg-gradient-to-r from-slate-700 to-red-500 text-white transition-all ease-in duration-100 delay-75 hover:scale-110 hover:shadow-lg hover:border text-[1rem] font-Rubik font-medium'>
+    return (
+        <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+            <h3 className="font-medium text-2xl text-gray-900 dark:text-white mb-6">Add Color</h3>
+            <div>
+                <form className="space-y-6" onSubmit={formik.handleSubmit}>
+                    <CustomInput
+                        value={formik.values.title}
+                        onChange={formik.handleChange("title")}
+                        onBlur={formik.handleBlur("title")}
+                        name="title"
+                        type="text"
+                        placeholder="Enter Color Name"
+                        classname="uppercase"
+                        id="AddColor"
+                    />
+                    {formik.touched.title && formik.errors.title && (
+                        <div className="text-red-500 text-sm -mt-4">{formik.errors.title}</div>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="px-5 py-2 rounded-md bg-gradient-to-r from-slate-700 to-red-500 dark:from-red-600 dark:to-red-700 text-white transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                    >
                         Add Color
                     </button>
-
                 </form>
             </div>
-            <div className={`${isLoading === true ? "block bg-black opacity-50 absolute top-0 left-0 w-full h-screen" : "hidden"}`}>
+
+            {/* Loading overlay */}
+            <div
+                className={`${isLoading ? "block" : "hidden"
+                    } fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-50 flex items-center justify-center`}
+            >
                 <SyncLoader
-                    color="#361AE3"
+                    color={isDarkMode ? "#f87171" : "#ef4444"} // red for color section
                     loading={isLoading}
-                    cssOverride={override}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
                 />
-
             </div>
-
         </div>
     )
 }

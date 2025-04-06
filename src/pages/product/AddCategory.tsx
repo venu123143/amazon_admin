@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react'
 import CustomInput from '../../components/CustomInput'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
@@ -6,6 +5,7 @@ import { AppDispatch, RootState } from '../../Redux/Store'
 import { useDispatch, useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
 import { createCategory } from '../../Redux/Reducers/pcategory/pcategorySlice'
+import { useTheme } from "../../context/themecontent"
 
 let CatSchema = object({
     title: string().required('Title is Required'),
@@ -15,16 +15,7 @@ let CatSchema = object({
 const AddProdCategory = () => {
     const dispatch: AppDispatch = useDispatch()
     const { isLoading } = useSelector((state: RootState) => state.pcategory)
-    const override: CSSProperties = {
-        display: "block",
-        margin: "0 auto",
-        borderColor: "red",
-        width: 380,
-        position: 'absolute',
-        top: "50%",
-        left: "50%",
-        transform: 'translateX(-50%, -50%)'
-    };
+    const { isDarkMode } = useTheme()
     const formik = useFormik({
         initialValues: {
             title: ''
@@ -37,32 +28,40 @@ const AddProdCategory = () => {
         }
     })
     return (
-        <div>
-            <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Product Category </h3>
+        <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+            <h3 className="font-medium text-2xl text-gray-900 dark:text-white mb-6">Add Product Category</h3>
             <div>
-                <form action="" method="post" className='space-y-3' onSubmit={formik.handleSubmit}>
-                    <CustomInput value={formik.values.title} onChange={formik.handleChange("title")} onBlur={formik.handleBlur("title")} name="title" type="text" placeholder="Add Product Category" className="AddProdCategory uppercase" id="AddProdCategory" />
+                <form className="space-y-6" onSubmit={formik.handleSubmit}>
+                    <CustomInput
+                        value={formik.values.title}
+                        onChange={formik.handleChange("title")}
+                        onBlur={formik.handleBlur("title")}
+                        name="title"
+                        type="text"
+                        placeholder="Product Category"
+                        classname="uppercase"
+                        id="AddProdCategory"
+                    />
                     {formik.touched.title && formik.errors.title ? (
-                        <div className="text-red-500 text-[14px] ">{formik.errors.title}</div>
+                        <div className="text-red-500 text-sm -mt-4">{formik.errors.title}</div>
                     ) : null}
 
-                    <button className='px-5 py-2 rounded-md bg-gradient-to-r from-slate-700 to-red-500 text-white transition-all ease-in duration-100 delay-75 hover:scale-110 hover:shadow-lg hover:border text-[1rem] font-Rubik font-medium'>
+                    <button
+                        type="submit"
+                        className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white transition-all duration-200 hover:shadow-lg hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                    >
                         Add Category
                     </button>
-
                 </form>
             </div>
-            <div className={`${isLoading === true ? "block bg-black opacity-50 absolute top-0 left-0 w-full h-screen" : "hidden"}`}>
-                <SyncLoader
-                    color="#361AE3"
-                    loading={isLoading}
-                    cssOverride={override}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                />
 
+            {/* Loading overlay */}
+            <div
+                className={`${isLoading ? "block" : "hidden"
+                    } fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-50 flex items-center justify-center`}
+            >
+                <SyncLoader color={isDarkMode ? "#3b82f6" : "#2563eb"} loading={isLoading} />
             </div>
-
         </div>
     )
 }

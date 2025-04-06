@@ -54,6 +54,9 @@ const LoginPage = () => {
       dispatch(login(values))
     },
   });
+  const handleGoogleLogin = async () => {
+    window.open(import.meta.env.VITE_API_GOOGLE_BACKEND_URL as string, "_self")
+  }
   return (
     <section className="bg-skin-background text-skin-base w-full">
       <Link to="/" className="absolute top-2 left-2 text-[#777777] flex items-center hover:text-black">
@@ -143,7 +146,7 @@ const LoginPage = () => {
                     </div>
                   </form>
                   <div className="flex items-center justify-center my-2">
-                    <button className="flex items-center bg-white border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    <button onClick={handleGoogleLogin} className="flex items-center bg-white border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                       <FcGoogle size={25} className="inline mr-2" />
                       <span>Continue with Google</span>
                     </button>

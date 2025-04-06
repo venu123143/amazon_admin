@@ -6,6 +6,8 @@ import { AppDispatch, RootState } from '../../Redux/Store'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBrand } from '../../Redux/Reducers/brand/brandSlice'
 import { SyncLoader } from 'react-spinners'
+import { useTheme } from "../../context/themecontent"
+
 import { useNavigate } from 'react-router-dom'
 let BrandSchema = object({
     title: string().required('Title is Required'),
@@ -16,6 +18,7 @@ const AddBrand = () => {
     const navigate = useNavigate()
     const { isLoading } = useSelector((state: RootState) => state.brand)
     const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
+    const { isDarkMode } = useTheme()
 
     useEffect(() => {
         if (user === null) {
@@ -45,8 +48,8 @@ const AddBrand = () => {
         }
     })
     return (
-        <div>
-            <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add Brand</h3>
+        <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+            <h3 className="font-medium text-2xl text-gray-900 dark:text-white mb-6">Add Brand</h3>
             <div>
                 <form action="" method="post" className='space-y-3' onSubmit={formik.handleSubmit}>
                     <CustomInput value={formik.values.title} onChange={formik.handleChange("title")} onBlur={formik.handleBlur("title")} name="title" type="text" placeholder="Enter Brand Title" className="AddBrand uppercase" id="AddBrand" />
@@ -62,7 +65,7 @@ const AddBrand = () => {
             </div>
             <div className={`${isLoading === true ? "block bg-black opacity-50 absolute top-0 left-0 w-full h-screen" : "hidden"}`}>
                 <SyncLoader
-                    color="#361AE3"
+                    color={isDarkMode ? "#361AE3" : "#361AE3"}
                     loading={isLoading}
                     cssOverride={override}
                     aria-label="Loading Spinner"

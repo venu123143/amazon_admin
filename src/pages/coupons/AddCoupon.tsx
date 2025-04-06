@@ -8,6 +8,7 @@ import CustomInput from "../../components/CustomInput"
 import { AppDispatch, RootState } from "../../Redux/Store"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useTheme } from "../../context/themecontent"
 
 import { createcoupon } from "../../Redux/Reducers/coupons/CouponSlice"
 import { BsCalendarDay } from "react-icons/bs"
@@ -30,6 +31,7 @@ const AddCoupon = () => {
     const navigate = useNavigate();
     const { isLoading } = useSelector((state: RootState) => state.coupon)
     const { message, user, isError, isSuccess } = useSelector((state: RootState) => state.auth)
+    const { isDarkMode } = useTheme()
 
 
     useEffect(() => {
@@ -69,8 +71,8 @@ const AddCoupon = () => {
 
 
     return (
-        <div>
-            <h3 className="font-Rubik font-[550] text-[1.52rem] font  my-4 ">Add coupon</h3>
+        <div className={`p-6 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+            <h3 className={`font-Rubik font-[550] text-[1.52rem] font  my-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Add coupon</h3>
             <div>
                 <form action="" method="post" className='space-y-3' onSubmit={formik.handleSubmit}>
                     {/* coupon */}
@@ -82,10 +84,24 @@ const AddCoupon = () => {
                     <div className="flex items-center w-full">
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <BsCalendarDay className="absolute left-3 top-3 z-10 w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                <BsCalendarDay className={`absolute left-3 top-3 z-10 w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
                             </div>
-                            <DatePicker dateFormat="dd/MM/yyyy" onSelect={handleDateChange} onBlur={formik.handleBlur("expiry")} onChange={handleDateChange} selected={formik.values.expiry}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                            <DatePicker
+                                dateFormat="dd/MM/yyyy"
+                                onSelect={handleDateChange}
+                                onBlur={formik.handleBlur("expiry")}
+                                onChange={handleDateChange}
+                                selected={formik.values.expiry}
+                                className={`border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 ${isDarkMode
+                                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                                        : 'bg-gray-50 border-gray-300 text-gray-900'
+                                    }`}
+                                calendarClassName={isDarkMode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white text-gray-900 border-gray-300'}
+                                dayClassName={(date) =>
+                                    isDarkMode
+                                        ? 'hover:bg-gray-600 text-white'
+                                        : 'hover:bg-gray-100 text-gray-900'
+                                }
                             />
                         </div>
                     </div>
